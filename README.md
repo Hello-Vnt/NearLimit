@@ -36,6 +36,8 @@ NearLimit gives each agent a **NEAR function-call access key** that can call exa
 - **NEP-297 events** (`EVENT_JSON`) for every decision, plus an on-chain activity log readable through view calls.
 - **NEAR AI Cloud** (private inference, OpenAI-compatible API) writes the plain-English explanation of pending requests. It is advisory only.
 
+**NEAR features used:** function-call access keys with a gas allowance (`AddKey` / `DeleteKey`), a Rust smart contract (near-sdk 5) on testnet, NEP-297 events, NEAR RPC view calls, NEAR Wallet Selector, and NEAR AI Cloud. **Not used:** NEAR Intents, Chain Signatures, NEP-141 tokens. All payments are native NEAR on testnet.
+
 ## Quick look (no wallet needed)
 
 Requires Node 20+.
@@ -213,6 +215,10 @@ Off-chain and advisory only (`src/lib/explain.ts`, `api/explain.ts`).
 - MCP server: @modelcontextprotocol/sdk, zod
 - NEAR: near-api-js, NEAR Wallet Selector (MyNearWallet, Meteor)
 - AI: NEAR AI Cloud through its OpenAI-compatible API
+
+## Hackathon window
+
+All code was written on 14 Nov 2026, inside the hackathon window. The tag [`pre-hackathon`](https://github.com/Hello-Vnt/NearLimit/tree/pre-hackathon) marks the repository's empty starting point (a one-line README), and [`hackathon-submission`](https://github.com/Hello-Vnt/NearLimit/tree/hackathon-submission) marks the submitted version. Everything built during the hackathon: [compare pre-hackathon...hackathon-submission](https://github.com/Hello-Vnt/NearLimit/compare/pre-hackathon...hackathon-submission).
 
 ## Disclosures
 

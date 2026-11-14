@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { ArrowUpRight, LogOut, Moon, Sun, Wallet } from 'lucide-react'
 import { LogoMark } from './LogoMark'
+import CursorLabel from './CursorLabel'
 import { CONTRACT_ID, DEMO_OWNER, REPO_URL, explorerAccount } from '../lib/config'
 import { formatNear, timeAgo } from '../lib/near'
 import { useVault } from '../lib/useVault'
@@ -255,6 +256,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <CursorLabel />
     </div>
   )
 }

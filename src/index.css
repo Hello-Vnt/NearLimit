@@ -486,3 +486,19 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .typing-dot { animation: none; }
 }
+
+/* ---- site-wide purple cursor (mouse and trackpad only) ---- */
+@media (pointer: fine) {
+  html,
+  body,
+  *,
+  *::before,
+  *::after {
+    cursor: url('/cursor.svg') 5 4, auto !important;
+  }
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='button']):not([type='submit']),
+  textarea,
+  [contenteditable='true'] {
+    cursor: text !important;
+  }
+}

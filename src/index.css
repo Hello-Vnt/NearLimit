@@ -24,6 +24,7 @@
   --accent-text: #5b2bb5;
   --accent-soft: rgba(166, 138, 255, 0.16);
   --accent-inv: #c4b0ff; /* accent on inverted (dark) bubbles */
+  --blob-a: 0.32;
   /* Supporting accents: coral for attacks and alerts, blue for agents and info. */
   --coral: #ff8a6b;
   --coral-fg: #5a1a0b;
@@ -61,6 +62,7 @@
   --accent-text: #c9b8ff;
   --accent-soft: rgba(179, 156, 255, 0.16);
   --accent-inv: #5b2bb5; /* inverted bubbles are light in dark mode */
+  --blob-a: 0.2;
   --coral: #ff9a7e;
   --coral-fg: #3d1105;
   --coral-text: #ffab94;
@@ -382,4 +384,54 @@ body {
   .cursor-drift {
     animation: none;
   }
+}
+
+/* ---- amplemarket-style hero ---- */
+@keyframes blob-drift {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, -30px) scale(1.08); }
+  100% { transform: translate(-30px, 20px) scale(0.96); }
+}
+.blob {
+  animation: blob-drift 18s ease-in-out infinite alternate;
+}
+@keyframes rock-3d {
+  0% { transform: rotateX(14deg) rotateY(calc(var(--tilt, 0deg) - 16deg)); }
+  100% { transform: rotateX(-6deg) rotateY(calc(var(--tilt, 0deg) + 16deg)); }
+}
+.rock-3d {
+  animation: rock-3d 9s ease-in-out infinite alternate;
+}
+@keyframes spin-coin {
+  0% { transform: rotateX(10deg) rotateY(-40deg); }
+  100% { transform: rotateX(-4deg) rotateY(40deg); }
+}
+.spin-coin {
+  animation: spin-coin 6s ease-in-out infinite alternate;
+}
+@keyframes fly-in {
+  0% { transform: translate(-46vw, 60px) rotate(-30deg); opacity: 0; filter: blur(6px); }
+  35% { opacity: 1; }
+  70%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 1; filter: blur(0); }
+}
+.fly-in {
+  animation: fly-in 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s both;
+}
+@keyframes streak-flow {
+  to { stroke-dashoffset: -220; }
+}
+.streak {
+  stroke-dasharray: 160 60;
+  animation: streak-flow 4.5s linear infinite;
+}
+@keyframes feed-in {
+  0% { opacity: 0; transform: translateY(-14px); background: var(--accent-soft); }
+  40% { opacity: 1; transform: none; background: var(--accent-soft); }
+  100% { background: transparent; }
+}
+.feed-in {
+  animation: feed-in 1.6s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .blob, .rock-3d, .spin-coin, .fly-in, .streak, .feed-in { animation: none; }
 }

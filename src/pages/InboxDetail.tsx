@@ -119,13 +119,19 @@ export default function InboxDetail() {
           </button>
           <button
             className="btn btn-ghost"
-            disabled={!!busy || !ex}
+            disabled={!!busy || !ex || ex.facts.receiverExists === false}
             onClick={async () => (await run('Approve', [tx.approve(req.id, ex?.hash ?? null)], 'Approved and sent')) && nav('/app')}
           >
             {busy === 'Approve' ? 'Waiting for wallet…' : 'Approve and send'}
           </button>
         </div>
-        {ex && <div className="mono mt-3 break-all text-[12px] text-muted">If you approve, this explanation’s hash is stored with it: {ex.hash}</div>}
+        {ex?.facts.receiverExists === false ? (
+          <div className="mt-3 rounded-xl bg-[var(--coral-soft)] px-3.5 py-2.5 text-[13px] leading-5 text-coral-text">
+            Approve is off because <span className="mono !text-[13px]">{req.receiver_id}</span> does not exist on testnet. NEAR cannot deliver to it, so the payment would bounce back to your vault. Reject it instead.
+          </div>
+        ) : (
+          ex && <div className="mono mt-3 break-all text-[12px] text-muted">If you approve, this explanation’s hash is stored with it: {ex.hash}</div>
+        )}
       </div>
     </div>
   )

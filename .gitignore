@@ -6,3 +6,8 @@ dist/
 target/
 *.agentkey.json
 .DS_Store
+
+# demo recordings (large, not for git)
+*.mov
+*.mp4
+video/

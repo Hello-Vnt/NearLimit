@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Activity,
@@ -24,6 +24,7 @@ import { AGENT_GAS_ALLOWANCE_NEAR, REPO_URL } from '../lib/config'
 import { CountUp, useAutoReveal } from '../components/Reveal'
 import FeatureCarousel from '../components/FeatureCarousel'
 import GuardGalaxy from '../components/GuardGalaxy'
+import HeroSection from '../components/HeroSection'
 
 // ---------------------------------------------------------------- shared bits
 
@@ -105,110 +106,6 @@ function MockCard({ icon: Icon, title, children }: { icon: LucideIcon; title: st
 }
 
 // ----------------------------------------------------------------------- hero
-
-function Arc() {
-  const cx = 820, cy = 800, R = 760
-  const pt = (deg: number, r = R) => [cx + r * Math.cos((deg * Math.PI) / 180), cy + r * Math.sin((deg * Math.PI) / 180)]
-  const tickAngles = Array.from({ length: 13 }, (_, i) => 180 + i * 15)
-  const dot = useRef<SVGCircleElement>(null)
-  const trail = useRef<SVGPathElement>(null)
-  const ticks = useRef<(SVGLineElement | null)[]>([])
-
-  useEffect(() => {
-    const [x0, y0] = pt(180)
-    const place = (deg: number) => {
-      const [x, y] = pt(deg)
-      dot.current?.setAttribute('cx', String(x))
-      dot.current?.setAttribute('cy', String(y))
-      trail.current?.setAttribute('d', `M ${x0} ${y0} A ${R} ${R} 0 0 1 ${x} ${y}`)
-      ticks.current.forEach((l, i) => {
-        const near = Math.abs(tickAngles[i] - deg) < 7.5
-        l?.setAttribute('stroke', near ? 'var(--fg)' : 'var(--border-strong)')
-        l?.setAttribute('stroke-width', near ? '1.6' : '1.25')
-      })
-    }
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return place(257)
-    let raf = 0
-    const t0 = performance.now()
-    const loop = (now: number) => {
-      const p = (1 - Math.cos(((now - t0) / 18000) * 2 * Math.PI)) / 2 // eases back and forth
-      place(205 + p * 130)
-      raf = requestAnimationFrame(loop)
-    }
-    raf = requestAnimationFrame(loop)
-    return () => cancelAnimationFrame(raf)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const arc = `M ${cx - R} ${cy} A ${R} ${R} 0 0 1 ${cx + R} ${cy}`
-  const [dx, dy] = pt(257)
-  return (
-    <svg aria-hidden="true" viewBox="0 0 1640 810" className="pointer-events-none absolute top-0 left-1/2 hidden w-[1640px] max-w-none -translate-x-1/2 md:block">
-      <path d={arc} fill="none" stroke="var(--muted)" strokeOpacity="0.45" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="0.1 13" />
-      <path ref={trail} fill="none" stroke="var(--accent)" strokeOpacity="1" strokeWidth="3.2" strokeLinecap="round" strokeDasharray="0.1 13" />
-      {tickAngles.map((deg, i) => {
-        const [x1, y1] = pt(deg, 702)
-        const [x2, y2] = pt(deg, 740)
-        return <line key={i} ref={(el) => { ticks.current[i] = el }} x1={x1} y1={y1} x2={x2} y2={y2} stroke="var(--border-strong)" strokeWidth={1.25} strokeLinecap="round" className="transition-[stroke] duration-300" />
-      })}
-      <circle ref={dot} cx={dx} cy={dy} r="6" fill="var(--accent)" stroke="var(--bg)" strokeWidth="2.5" />
-    </svg>
-  )
-}
-
-const HERO_THREAD: Msg[] = [
-  { from: 'agent', text: 'Pay 0.1 NEAR to coffee.testnet' },
-  { from: 'guard', text: '✅ Approved. Sent.' },
-  { from: 'agent', text: 'Send 5 NEAR to drain.testnet' },
-  { from: 'guard', text: '⛔ Blocked: over per-tx limit' },
-  { from: 'agent', text: 'Send 0.8 NEAR to a new account' },
-  { from: 'guard', text: '⏸ Pending. Asking the owner.' },
-]
-
-const BUILT_WITH = ['NEAR Protocol', 'near-sdk-rs', 'NEAR AI Cloud', 'Wallet Selector', 'MCP', 'Rust']
-
-function Hero() {
-  const headline = 'Your AI agent can spend. It just can’t overspend.'
-  return (
-    <section className="relative overflow-hidden">
-      <Arc />
-      <div className="container-page relative flex flex-col items-center pt-14 text-center md:pt-[150px]">
-        <span className="rise-in">
-          <span className="inline-flex h-8 items-center gap-2 rounded-full bg-[var(--accent-soft)] px-3.5 text-[13px] font-medium text-accent-text">
-            <ShieldCheck className="size-4" strokeWidth={2} /> A spending firewall for AI agents on NEAR
-          </span>
-        </span>
-        <h1
-          className="mt-7 max-w-[980px] text-[44px] leading-[1.02] font-medium tracking-[-0.045em] text-balance sm:text-[60px] md:text-[88px] md:leading-[0.98]"
-          aria-label={headline}
-        >
-          {headline.split(' ').map((w, i) => (
-            <Fragment key={i}>
-              <span aria-hidden="true" className="rise-in" style={{ '--d': `${150 + i * 65}ms` } as CSSProperties}>{w}</span>{' '}
-            </Fragment>
-          ))}
-        </h1>
-        <p className="rise-in !block mt-7 max-w-[560px] text-[18px] leading-[28px] text-muted" style={{ '--d': '750ms' } as CSSProperties}>
-          Give your agent a key that can only ask. NearLimit checks every payment on NEAR against your limits, holds the unusual ones for you, and blocks the rest.
-        </p>
-        <div className="rise-in !flex mt-8 flex-wrap justify-center gap-2.5" style={{ '--d': '880ms' } as CSSProperties}>
-          <Link to="/playground" className="btn btn-accent h-11 rounded-[20px] px-5 text-[15px]">Try to trick an agent <ArrowUpRight className="size-4" /></Link>
-          <Link to="/app" className="btn btn-outline h-11 rounded-[20px] px-5 text-[15px]">Open the app</Link>
-        </div>
-        <span className="rise-in mt-3 text-[13px] text-muted" style={{ '--d': '950ms' } as CSSProperties}>Interactive tutorial · no wallet needed</span>
-        <div
-          className="rise-in !flex mt-12 w-full max-w-[760px] flex-wrap items-center justify-center gap-x-9 gap-y-3 text-[17px] font-semibold tracking-[-0.02em] text-muted opacity-70"
-          style={{ '--d': '1020ms' } as CSSProperties}
-          aria-label="Built with"
-        >
-          {BUILT_WITH.map((b) => <span key={b} className="whitespace-nowrap">{b}</span>)}
-        </div>
-        <div className="rise-in !block mt-14 h-[430px] w-full overflow-hidden" style={{ '--d': '1100ms' } as CSSProperties} aria-label="Example conversation between an agent and NearLimit">
-          <Phone thread={HERO_THREAD} animate />
-        </div>
-      </div>
-    </section>
-  )
-}
 
 // -------------------------------------------------------------------- problem
 
@@ -818,7 +715,7 @@ export default function Landing() {
   useAutoReveal()
   return (
     <div>
-      <Hero />
+      <HeroSection />
       <Features />
       <Problem />
       <Product />

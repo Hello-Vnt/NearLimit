@@ -10,7 +10,8 @@ NEAR Hackathon 2026 · Track: AI Security & Defense (also Agent Economy)
 | | |
 |---|---|
 | Contract (testnet) | [`agentguard-vault.testnet`](https://testnet.nearblocks.io/address/agentguard-vault.testnet) — the account keeps the project’s working name (deploy tx `42zpCL6bqyPUTUHTCr8QED9Pyc7uGTwQVCiRgQFpPXpx`) |
-| Live app | `TODO: Vercel URL` |
+| Live app | Not hosted yet. Runs locally in about two minutes, see [Quick look](#quick-look-no-wallet-needed) |
+| Contract tests | 18 / 18 passing (`cd contract && cargo test`) |
 | Status | Testnet only. Not audited. Do not use with real funds. |
 
 ## The problem
@@ -35,7 +36,20 @@ NearLimit gives each agent a **NEAR function-call access key** that can call exa
 - **NEP-297 events** (`EVENT_JSON`) for every decision, plus an on-chain activity log readable through view calls.
 - **NEAR AI Cloud** (private inference, OpenAI-compatible API) writes the plain-English explanation of pending requests. It is advisory only.
 
-## Try it: do X, see Y
+## Quick look (no wallet needed)
+
+Requires Node 20+.
+
+```bash
+npm install
+npm run dev            # http://localhost:5173
+```
+
+1. Open `/playground`. → The **Simulation** tab plays the ShopBot story by itself, with callouts: a normal invoice is Approved, a poisoned invoice's 5 NEAR is Blocked, its 0.8 NEAR is held, the owner rejects it, and a frozen agent is blocked. It uses the same rule order as the contract. Click any invoice to take over, or **Write your own attack**.
+2. Open `/v/clearglove8618.testnet`. → Read-only activity of a real vault on testnet, straight from the contract.
+3. Run `cd contract && cargo test`. → `test result: ok. 18 passed`.
+
+## Try it on testnet: do X, see Y
 
 You need a NEAR **testnet** wallet (MyNearWallet or Meteor) with a few test NEAR.
 
@@ -138,7 +152,8 @@ Off-chain and advisory only (`src/lib/explain.ts`, `api/explain.ts`).
 ## Known limits
 
 - Testnet only. No audit. Storage is paid by the contract account.
-- ShopBot in the Playground is **scripted**, not a live LLM: it follows payment instructions found in a memo, so the run is the same every time.
+- ShopBot in the Playground is **scripted**, not a live LLM: it follows payment instructions found in a memo, so the run is the same every time. The Simulation tab runs the policy in the browser; the Real testnet run tab sends real transactions. To try a real LLM agent, use the MCP server.
+- The home page's agent feed card is an illustrative example (it is labelled so); the ticker above the navbar and the `/v/<account>` pages show real testnet activity.
 - Account age is not shown in the facts (it needs an indexer, not RPC).
 - No near-workspaces integration tests yet; the policy rules are covered by unit tests.
 - Out of scope: mainnet, NEAR Intents, NEP-141 tokens, multiple owners per vault, Telegram alerts, TEE attestation display.
@@ -146,7 +161,8 @@ Off-chain and advisory only (`src/lib/explain.ts`, `api/explain.ts`).
 ## Libraries
 
 - Contract: [near-sdk-rs](https://github.com/near/near-sdk-rs) 5.x, cargo-near
-- Frontend: Vite, React, TypeScript, Tailwind CSS, lucide-react, react-router
+- Frontend: Vite, React, TypeScript, Tailwind CSS, lucide-react, react-router, buffer (browser polyfill)
+- MCP server: @modelcontextprotocol/sdk, zod
 - NEAR: near-api-js, NEAR Wallet Selector (MyNearWallet, Meteor)
 - AI: NEAR AI Cloud through its OpenAI-compatible API
 
@@ -156,7 +172,7 @@ Off-chain and advisory only (`src/lib/explain.ts`, `api/explain.ts`).
 - **Built in the hackathon window**: everything in this repository. There is no pre-hackathon code; the first line was written on 14 Nov 2026.
 - **AI-assisted code**: the contract, tests, frontend, serverless function and this README were written with Claude Code (Anthropic) from the author's product spec, then reviewed by the author.
 - **Photos** on the home page are from [Unsplash](https://unsplash.com/license), free to use: Taylor Vick, Scott Graham, rupixen, Annie Spratt, Amol Tyagi, Shubham Dhage, freestocks, Alex Knight and Jason Leung. They are loaded from images.unsplash.com.
-- The visual style mixes beside.com (stone palette, section layouts) and plnty.app (live ticker, navbar, hero, tiled CTA, footer, lavender accent), set in Inter. No assets or code were copied from either site.
+- The visual style takes cues from beside.com (stone palette, section layouts), plnty.app (live ticker, navbar, tiled CTA, footer, lavender accent, cursor) and amplemarket.com (hero feed card, bento grid), set in Inter. No assets or code were copied from any of them.
 
 ## License
 

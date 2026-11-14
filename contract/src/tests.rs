@@ -24,7 +24,7 @@ fn other_key() -> PublicKey {
 
 fn ctx(signer_pk: PublicKey, deposit: u128, ts: u64) {
     testing_env!(VMContextBuilder::new()
-        .current_account_id(acc("agentguard.testnet"))
+        .current_account_id(acc("nearlimit.testnet"))
         .predecessor_account_id(owner())
         .signer_account_id(owner())
         .signer_account_pk(signer_pk)
@@ -46,8 +46,8 @@ fn policy() -> Policy {
 }
 
 /// Vault with 10 NEAR and one agent ("ShopBot").
-fn setup() -> AgentGuard {
-    let mut c = AgentGuard::default();
+fn setup() -> NearLimit {
+    let mut c = NearLimit::default();
     ctx(owner_key(), 10 * NEAR, T0);
     c.deposit();
     ctx(owner_key(), 0, T0);
@@ -55,7 +55,7 @@ fn setup() -> AgentGuard {
     c
 }
 
-fn request(c: &mut AgentGuard, to: &str, amount: u128, ts: u64) -> Option<TransferResult> {
+fn request(c: &mut NearLimit, to: &str, amount: u128, ts: u64) -> Option<TransferResult> {
     ctx(agent_key(), 0, ts);
     match c.request_transfer(acc(to), U128(amount), Some("invoice".to_string())) {
         PromiseOrValue::Value(r) => Some(r),
@@ -63,13 +63,13 @@ fn request(c: &mut AgentGuard, to: &str, amount: u128, ts: u64) -> Option<Transf
     }
 }
 
-fn vault(c: &AgentGuard) -> Vault {
+fn vault(c: &NearLimit) -> Vault {
     c.get_vault(owner()).unwrap()
 }
 
 #[test]
 fn first_deposit_needs_half_a_near() {
-    let mut c = AgentGuard::default();
+    let mut c = NearLimit::default();
     ctx(owner_key(), NEAR / 2, T0);
     c.deposit();
     assert_eq!(vault(&c).balance.0, NEAR / 2);
@@ -78,7 +78,7 @@ fn first_deposit_needs_half_a_near() {
 #[test]
 #[should_panic(expected = "at least 0.5 NEAR")]
 fn small_first_deposit_panics() {
-    let mut c = AgentGuard::default();
+    let mut c = NearLimit::default();
     ctx(owner_key(), NEAR / 10, T0);
     c.deposit();
 }

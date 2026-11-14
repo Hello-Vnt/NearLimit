@@ -1,4 +1,4 @@
-//! AgentGuard: a spending firewall for AI agents on NEAR.
+//! NearLimit: a spending firewall for AI agents on NEAR.
 //!
 //! An owner deposits NEAR into a vault and registers agents by public key.
 //! Each agent holds a NEAR function-call access key on the owner's account that
@@ -111,12 +111,12 @@ pub struct TransferResult {
 }
 
 #[near(contract_state)]
-pub struct AgentGuard {
+pub struct NearLimit {
     vaults: LookupMap<AccountId, Vault>,
     activity: LookupMap<(AccountId, u64), Activity>,
 }
 
-impl Default for AgentGuard {
+impl Default for NearLimit {
     fn default() -> Self {
         Self {
             vaults: LookupMap::new(b"v".to_vec()),
@@ -155,7 +155,7 @@ fn blank(kind: &str) -> Activity {
     }
 }
 
-impl AgentGuard {
+impl NearLimit {
     fn vault_of(&self, owner: &AccountId) -> Vault {
         self.vaults
             .get(owner)
@@ -176,7 +176,7 @@ impl AgentGuard {
         let mut data = serde_json::to_value(&a).unwrap_or_else(|_| json!({}));
         data["owner_id"] = json!(owner);
         let event = json!({
-            "standard": "agentguard",
+            "standard": "nearlimit",
             "version": "1.0.0",
             "event": a.kind,
             "data": [data],
@@ -215,7 +215,7 @@ impl AgentGuard {
 }
 
 #[near]
-impl AgentGuard {
+impl NearLimit {
     // ---------------------------------------------------------------- owner
 
     /// Adds NEAR to the caller's vault. The first deposit creates the vault.

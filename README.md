@@ -9,7 +9,7 @@ NEAR Hackathon 2026 · Track: AI Security & Defense (also Agent Economy)
 
 | | |
 |---|---|
-| Contract (testnet) | [`agentguard-vault.testnet`](https://testnet.nearblocks.io/address/agentguard-vault.testnet) — the account keeps the project’s working name (deploy tx `42zpCL6bqyPUTUHTCr8QED9Pyc7uGTwQVCiRgQFpPXpx`) |
+| Contract (testnet) | [`nearlimit.testnet`](https://testnet.nearblocks.io/address/nearlimit.testnet) (deploy tx `BDe8puDWnrTuQwjvtLGpLLnfQBrhqDaFCppv7tDhSwm7`) |
 | Live app | Not hosted yet. Runs locally in about two minutes, see [Quick look](#quick-look-no-wallet-needed) |
 | Contract tests | 18 / 18 passing (`cd contract && cargo test`) |
 | Status | Testnet only. Not audited. Do not use with real funds. |
@@ -46,7 +46,7 @@ npm run dev            # http://localhost:5173
 ```
 
 1. Open `/playground`. → The **Simulation** tab plays the ShopBot story by itself, with callouts: a normal invoice is Approved, a poisoned invoice's 5 NEAR is Blocked, its 0.8 NEAR is held, the owner rejects it, and a frozen agent is blocked. It uses the same rule order as the contract. Click any invoice to take over, or **Write your own attack**.
-2. Open `/v/clearglove8618.testnet`. → Read-only activity of a real vault on testnet, straight from the contract.
+2. Open `/v/<any-vault-owner>.testnet`. → Read-only activity of that vault on testnet, straight from the contract.
 3. Run `cd contract && cargo test`. → `test result: ok. 18 passed`.
 
 ## Try it on testnet: do X, see Y
@@ -122,7 +122,7 @@ Deploy the app to Vercel as a Vite project. Set `VITE_CONTRACT_ID`, and optional
 
 ## Contract
 
-`contract/src/lib.rs`, Rust, near-sdk 5. The project was renamed from AgentGuard to NearLimit late in the hackathon. The contract source, its account (`agentguard-vault.testnet`) and its event standard (`agentguard`) keep the old working name so the code stays identical to what is deployed.
+`contract/src/lib.rs`, Rust, near-sdk 5. Deployed at `nearlimit.testnet`. (An earlier build under the working name AgentGuard ran at `agentguard-vault.testnet` during development and is no longer used.)
 
 | Method | Who | Notes |
 |---|---|---|
@@ -137,7 +137,7 @@ Deploy the app to Vercel as a Vite project. Set `VITE_CONTRACT_ID`, and optional
 
 Order of checks in `request_transfer`: paused / frozen / expired → blocklist → per-transaction limit → vault balance (all **Blocked**); then daily limit → allowlist → approval threshold (all **Pending**); otherwise **Approved** and paid with `Promise::transfer`. Blocked requests do not panic, so the attempt stays on-chain. The daily window is the UTC day from `block_timestamp`. If a transfer fails (for example the receiver account does not exist) a callback returns the amount to the vault and logs `transfer_failed`.
 
-Events (`standard: "agentguard"`): `transfer_approved`, `transfer_pending`, `transfer_blocked`, `transfer_failed`, `request_approved`, `request_rejected`, `agent_added`, `agent_frozen`, `agent_unfrozen`, `agent_removed`, `policy_updated`, `vault_paused`, `vault_unpaused`, `deposit`, `withdraw`.
+Events (`standard: "nearlimit"`): `transfer_approved`, `transfer_pending`, `transfer_blocked`, `transfer_failed`, `request_approved`, `request_rejected`, `agent_added`, `agent_frozen`, `agent_unfrozen`, `agent_removed`, `policy_updated`, `vault_paused`, `vault_unpaused`, `deposit`, `withdraw`.
 
 ## The AI layer
 

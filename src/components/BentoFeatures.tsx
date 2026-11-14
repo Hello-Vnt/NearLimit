@@ -22,6 +22,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { LogoMark } from './LogoMark'
+import { BotMascot } from './BotMascot'
 
 /*
  * Bento grid after amplemarket.com: four cards with a centred heading and a
@@ -67,18 +68,7 @@ const SIGNALS: { text: string; color: string }[] = [
 function Mascot() {
   return (
     <div className="float-y relative z-10 flex size-[170px] items-center justify-center rounded-[44px] bg-[#2a2928] shadow-[0_30px_60px_-24px_rgba(0,0,0,0.5),inset_0_2px_0_rgba(255,255,255,0.08)] md:size-[200px]" style={{ animationDuration: '5s' }}>
-      <div
-        className="relative flex size-[96px] rotate-45 items-center justify-center rounded-[26px] md:size-[112px]"
-        style={{
-          background: 'radial-gradient(circle at 30% 25%, #e9e0ff, #b39cff 45%, #7a5cf0 95%)',
-          boxShadow: 'inset 0 3px 4px rgba(255,255,255,.6), inset 0 -14px 22px rgba(60,20,140,.35), 0 10px 26px -8px #7a5cf0',
-        }}
-      >
-        <div className="flex -rotate-45 gap-3">
-          <span className="blink h-5 w-2.5 rounded-full bg-[#1a1a19]" />
-          <span className="blink h-5 w-2.5 rounded-full bg-[#1a1a19]" />
-        </div>
-      </div>
+      <BotMascot size={150} bob={false} />
     </div>
   )
 }

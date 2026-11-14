@@ -14,13 +14,13 @@ import {
   Plug,
   Search,
   Server,
-  ShieldCheck,
   ShoppingCart,
   Sparkles,
   X,
   type LucideIcon,
 } from 'lucide-react'
 import { LogoMark } from './LogoMark'
+import { BotMascot } from './BotMascot'
 import { REPO_URL } from '../lib/config'
 
 /*
@@ -278,7 +278,9 @@ export default function HeroSection() {
           <div className="fly-in pointer-events-none absolute top-[140px] left-[13%] hidden lg:block">
             <Tile3D size={74} from="#ffc2b0" to="#e0573a" icon={KeyRound} tilt={-18} dur={8} />
           </div>
-          <Tile3D size={112} from="#c9b8ff" to="#7a5cf0" icon={ShieldCheck} className="top-[-56px] left-[calc(50%+250px)] hidden md:block" tilt={16} dur={9} />
+          <div className="rise-in pointer-events-none absolute top-[-92px] left-[calc(50%+200px)] z-20 hidden md:block" style={d(700)}>
+            <BotMascot size={150} glow="#a68aff" look={-0.8} />
+          </div>
           <Coin3D size={84} className="top-[300px] left-[calc(50%+330px)] hidden lg:block" />
           <Tile3D size={64} from="#bfe0ff" to="#3d8be0" icon="logo" className="top-[360px] left-[calc(50%-400px)] hidden lg:block" tilt={-12} dur={10} />
 

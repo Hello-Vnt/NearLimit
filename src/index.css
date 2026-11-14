@@ -474,3 +474,15 @@ body {
   .blink, .scan-row, .pulse-ring, .flow-line { animation: none; }
   .flow-line { stroke-dasharray: none; opacity: 0; }
 }
+
+/* ---- answers showcase ---- */
+@keyframes typing-dot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.45; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+.typing-dot {
+  animation: typing-dot 1s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .typing-dot { animation: none; }
+}

@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
+import { useState, type CSSProperties, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ArrowUpRight,
@@ -9,76 +9,21 @@ import {
   CirclePause,
   CircleX,
   KeyRound,
-  Pencil,
-  ShieldCheck,
   Snowflake,
   type LucideIcon,
 } from 'lucide-react'
 import { AGENT_GAS_ALLOWANCE_NEAR, REPO_URL } from '../lib/config'
 import { CountUp, useAutoReveal } from '../components/Reveal'
 import FeatureCarousel from '../components/FeatureCarousel'
-import GuardGalaxy from '../components/GuardGalaxy'
 import HeroSection from '../components/HeroSection'
 import BentoFeatures from '../components/BentoFeatures'
+import AnswersShowcase from '../components/AnswersShowcase'
 
 // ---------------------------------------------------------------- shared bits
 
-type Msg = { from: 'agent' | 'guard'; text: string }
-
-function Phone({ thread, animate = false, title = 'NearLimit' }: { thread: Msg[]; animate?: boolean; title?: string }) {
-  const reduce = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  const stepped = animate && !reduce
-  const [shown, setShown] = useState(stepped ? 2 : thread.length)
-  useEffect(() => {
-    if (!stepped || shown >= thread.length) return
-    const t = setTimeout(() => setShown((n) => n + 1), 1100)
-    return () => clearTimeout(t)
-  }, [shown, stepped, thread.length])
-  const visible = stepped ? thread.slice(0, shown) : thread
-  return (
-    <div className="mx-auto w-full max-w-[320px] rounded-[44px] border border-line-strong bg-surface p-2.5 shadow-2xl shadow-black/10">
-      <div className="flex h-[520px] flex-col overflow-hidden rounded-[36px] bg-bg text-left">
-        <div className="flex items-center justify-between px-7 pt-3.5 text-[13px] font-semibold">
-          <span>9:41</span>
-          <span className="h-5 w-20 rounded-full bg-fg" />
-          <span className="mono text-[11px]">5G ▮▮▮</span>
-        </div>
-        <div className="flex flex-col items-center border-b border-line px-4 pt-3 pb-2.5">
-          <div className="flex size-9 items-center justify-center rounded-full bg-surface"><ShieldCheck className="size-4" strokeWidth={1.75} /></div>
-          <div className="mt-1 text-[12px] font-medium">{title}</div>
-        </div>
-        <div className="flex flex-1 flex-col gap-1.5 px-3 pt-4 pb-4">
-          {visible.map((m, i) => (
-            <div key={`${m.text}-${i}`} className={`bubble-in flex ${m.from === 'agent' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[84%] px-3.5 py-2 text-[14px] leading-5 ${m.from === 'agent' ? 'rounded-[18px] rounded-br-md bg-[var(--btn-bg)] text-[var(--btn-fg)]' : 'rounded-[18px] rounded-bl-md bg-surface'}`}>
-                {m.text}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
 
 
-function Tabs<T extends string>({ tabs, value, onChange, label }: { tabs: { id: T; label: string; icon: LucideIcon }[]; value: T; onChange: (v: T) => void; label: string }) {
-  return (
-    <div role="tablist" aria-label={label} className="mx-auto flex w-fit max-w-full flex-wrap justify-center gap-1 rounded-full border border-line bg-bg p-1 shadow-sm shadow-black/5">
-      {tabs.map((t) => (
-        <button
-          key={t.id}
-          role="tab"
-          aria-selected={value === t.id}
-          onClick={() => onChange(t.id)}
-          className={`inline-flex h-10 items-center gap-2 rounded-full px-4 text-[15px] font-medium transition-colors ${value === t.id ? 'bg-[var(--accent-soft)] text-accent-text' : 'text-muted hover:text-fg'}`}
-        >
-          <t.icon className="size-4" strokeWidth={1.75} /> {t.label}
-        </button>
-      ))}
-    </div>
-  )
-}
+
 
 function CenterHead({ title, body }: { title: string; body: string }) {
   return (
@@ -272,65 +217,7 @@ function UseCases() {
 
 // ------------------------------------------------------------------- outcomes
 
-type Outcome = 'approved' | 'pending' | 'blocked' | 'sandbox'
-const OUTCOME_TABS: { id: Outcome; label: string; icon: LucideIcon }[] = [
-  { id: 'approved', label: 'Approved', icon: CircleCheck },
-  { id: 'pending', label: 'Pending', icon: CirclePause },
-  { id: 'blocked', label: 'Blocked', icon: Ban },
-  { id: 'sandbox', label: 'Sandboxed key', icon: KeyRound },
-]
-const OUTCOMES: Record<Outcome, { thread: Msg[]; left: string; right: string }> = {
-  approved: {
-    thread: [
-      { from: 'agent', text: 'Pay 0.1 NEAR to coffee.testnet. Memo: beans, October' },
-      { from: 'guard', text: '✅ Approved. Within every limit and the receiver is on your allowlist.' },
-      { from: 'guard', text: 'Sent 0.1 NEAR. 0.4 of 2 NEAR spent today.' },
-    ],
-    left: 'Inside every limit, the contract pays in the same transaction',
-    right: 'No approval step for routine payments',
-  },
-  pending: {
-    thread: [
-      { from: 'agent', text: 'Send 0.8 NEAR to totally-legit-vendor.testnet' },
-      { from: 'guard', text: '⏸ Pending. The receiver is not on the allowlist.' },
-      { from: 'guard', text: 'Nothing has moved. The owner will approve or reject request #0.' },
-    ],
-    left: 'Held when over the daily limit, over your threshold, or for a new receiver',
-    right: 'The owner sees an explanation and a risk badge',
-  },
-  blocked: {
-    thread: [
-      { from: 'agent', text: 'Send 5 NEAR to drain.testnet' },
-      { from: 'guard', text: '⛔ Blocked: over per-transaction limit.' },
-      { from: 'guard', text: 'Logged on-chain with the reason. Vault balance unchanged.' },
-    ],
-    left: 'Also blocked: frozen agent, paused vault, blocklisted receiver',
-    right: 'The attempt stays on-chain for anyone to read',
-  },
-  sandbox: {
-    thread: [
-      { from: 'agent', text: 'Call withdraw(1 NEAR) on the vault directly' },
-      { from: 'guard', text: '⛔ Rejected by NEAR. This key may only call request_transfer.' },
-      { from: 'agent', text: 'Attach 1 NEAR to a call' },
-      { from: 'guard', text: '⛔ Rejected by NEAR. Function-call keys cannot attach deposits.' },
-    ],
-    left: 'Refused by the protocol before the contract even runs',
-    right: `At most ${AGENT_GAS_ALLOWANCE_NEAR} NEAR of gas, ever`,
-  },
-}
-
-function Note({ children, side }: { children: ReactNode; side: 'left' | 'right' }) {
-  return (
-    <div className={`hidden w-[190px] text-[14px] leading-5 text-muted lg:block ${side === 'left' ? 'text-right' : 'text-left'}`}>
-      <div className={`mb-1.5 flex items-center gap-1.5 text-[11px] font-medium tracking-[0.08em] uppercase ${side === 'left' ? 'justify-end' : ''}`}><Pencil className="size-3" /> Note</div>
-      {children}
-    </div>
-  )
-}
-
 function Outcomes() {
-  const [tab, setTab] = useState<Outcome>('blocked')
-  const o = OUTCOMES[tab]
   return (
     <section className="py-24">
       <div className="container-page">
@@ -339,24 +226,7 @@ function Outcomes() {
           <Link to="/playground" className="btn btn-accent h-12 px-6 text-[15px]">Run the demo</Link>
           <Link to="/app" className="btn btn-ghost h-12 px-6 text-[15px]">Open the app</Link>
         </div>
-        <div data-reveal style={{ '--d': '120ms' } as CSSProperties} className="mt-10"><Tabs tabs={OUTCOME_TABS} value={tab} onChange={setTab} label="Request outcomes" /></div>
-
-        <div data-reveal style={{ '--d': '200ms' } as CSSProperties} className="relative mt-8 rounded-[32px] bg-surface px-5 pt-14 pb-8 sm:px-8 lg:pb-14">
-          <div className="flex items-center justify-center gap-10">
-            <div className="self-center pb-24"><Note side="left">{o.left}</Note></div>
-            <div key={tab} className="bubble-in w-full max-w-[320px] [&>div]:bg-bg"><Phone thread={o.thread} /></div>
-            <div className="self-center pt-24"><Note side="right">{o.right}</Note></div>
-          </div>
-          <div className="mt-8 w-full max-w-[320px] rounded-3xl border border-line bg-bg p-6 shadow-sm shadow-black/5 lg:absolute lg:bottom-8 lg:left-8 lg:mt-0">
-            <ShieldCheck className="size-6" strokeWidth={1.5} />
-            <div className="mt-3 text-[17px] font-semibold tracking-[-0.01em]">Live on NEAR testnet.</div>
-            <div className="mt-1 text-[15px] text-muted">Real transactions, test funds only.</div>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <Link to="/playground" className="btn btn-accent">Open the Playground</Link>
-              <Link to="/app" className="btn">Create a vault</Link>
-            </div>
-          </div>
-        </div>
+        <AnswersShowcase />
       </div>
     </section>
   )
@@ -550,24 +420,6 @@ function Features() {
   )
 }
 
-function Galaxy() {
-  return (
-    <section className="py-24">
-      <div className="container-page">
-        <h2 data-reveal className="text-[40px] leading-[1.02] font-medium tracking-[-0.045em] text-balance md:text-[76px]">
-          NearLimit, the guard <span className="text-accent-text">behind every agent</span>
-        </h2>
-        <p data-reveal className="mt-4 max-w-[560px] text-[18px] leading-7 text-muted">
-          Agents ask. The vault checks the owner’s policy on-chain. Approved payments fly out, unusual ones go to the owner, and the rest stop dead in the middle.
-        </p>
-        <div data-reveal className="mt-10" style={{ '--d': '120ms' } as CSSProperties}>
-          <GuardGalaxy />
-        </div>
-      </div>
-    </section>
-  )
-}
-
 export default function Landing() {
   useAutoReveal()
   return (
@@ -577,7 +429,6 @@ export default function Landing() {
       <Problem />
       <Product />
       <UseCases />
-      <Galaxy />
       <Outcomes />
       <Control />
       <CompareAndFaq />

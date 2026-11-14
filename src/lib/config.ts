@@ -13,3 +13,4 @@ export const explorerTx = (hash: string) => `${EXPLORER}/txns/${hash}`
 export const explorerAccount = (id: string) => `${EXPLORER}/address/${id}`
 /** Vault whose real testnet activity the home page shows. Empty hides the feed. */
 export const DEMO_OWNER: string = (import.meta.env.VITE_DEMO_OWNER ?? '').trim()
+export const REPO_URL = 'https://github.com/Hello-Vnt/NearLimit'

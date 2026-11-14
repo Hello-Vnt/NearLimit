@@ -2,7 +2,7 @@ import { Fragment, useEffect, useRef, useState, type CSSProperties, type ReactNo
 import { Link } from 'react-router-dom'
 import {
   Activity,
-  ArrowRight,
+  ArrowUpRight,
   Ban,
   Check,
   ChevronDown,
@@ -20,7 +20,7 @@ import {
   Users,
   type LucideIcon,
 } from 'lucide-react'
-import { AGENT_GAS_ALLOWANCE_NEAR } from '../lib/config'
+import { AGENT_GAS_ALLOWANCE_NEAR, REPO_URL } from '../lib/config'
 import { CountUp, useAutoReveal } from '../components/Reveal'
 
 // ---------------------------------------------------------------- shared bits
@@ -63,9 +63,6 @@ function Phone({ thread, animate = false, title = 'NearLimit' }: { thread: Msg[]
   )
 }
 
-function Chip({ children }: { children: ReactNode }) {
-  return <span className="inline-flex h-9 items-center gap-2 rounded-full border border-line-strong bg-bg px-3.5 text-[14px] font-medium">{children}</span>
-}
 
 function Tabs<T extends string>({ tabs, value, onChange, label }: { tabs: { id: T; label: string; icon: LucideIcon }[]; value: T; onChange: (v: T) => void; label: string }) {
   return (
@@ -145,13 +142,13 @@ function Arc() {
   return (
     <svg aria-hidden="true" viewBox="0 0 1640 810" className="pointer-events-none absolute top-0 left-1/2 hidden w-[1640px] max-w-none -translate-x-1/2 md:block">
       <path d={arc} fill="none" stroke="var(--muted)" strokeOpacity="0.45" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="0.1 13" />
-      <path ref={trail} fill="none" stroke="var(--fg)" strokeOpacity="0.85" strokeWidth="3.2" strokeLinecap="round" strokeDasharray="0.1 13" />
+      <path ref={trail} fill="none" stroke="var(--accent)" strokeOpacity="1" strokeWidth="3.2" strokeLinecap="round" strokeDasharray="0.1 13" />
       {tickAngles.map((deg, i) => {
-        const [x1, y1] = pt(deg, 580)
-        const [x2, y2] = pt(deg, 628)
+        const [x1, y1] = pt(deg, 702)
+        const [x2, y2] = pt(deg, 740)
         return <line key={i} ref={(el) => { ticks.current[i] = el }} x1={x1} y1={y1} x2={x2} y2={y2} stroke="var(--border-strong)" strokeWidth={1.25} strokeLinecap="round" className="transition-[stroke] duration-300" />
       })}
-      <circle ref={dot} cx={dx} cy={dy} r="5.5" fill="var(--fg)" />
+      <circle ref={dot} cx={dx} cy={dy} r="6" fill="var(--accent)" stroke="var(--bg)" strokeWidth="2.5" />
     </svg>
   )
 }
@@ -165,27 +162,45 @@ const HERO_THREAD: Msg[] = [
   { from: 'guard', text: '⏸ Pending. Asking the owner.' },
 ]
 
+const BUILT_WITH = ['NEAR Protocol', 'near-sdk-rs', 'NEAR AI Cloud', 'Wallet Selector', 'MCP', 'Rust']
+
 function Hero() {
+  const headline = 'Your AI agent can spend. It just can’t overspend.'
   return (
     <section className="relative overflow-hidden">
       <Arc />
-      <div className="container-page relative flex flex-col items-center pt-16 text-center md:pt-[200px]">
-        <span className="rise-in"><Chip><ShieldCheck className="size-4" strokeWidth={1.75} /> Checks every payment</Chip></span>
-        <h1 className="h1 mt-7 max-w-[620px] md:text-[56px] md:leading-[66px]" aria-label="Your AI agent can spend. It just can’t overspend.">
-          {'Your AI agent can spend. It just can’t overspend.'.split(' ').map((w, i) => (
+      <div className="container-page relative flex flex-col items-center pt-14 text-center md:pt-[150px]">
+        <span className="rise-in">
+          <span className="inline-flex h-8 items-center gap-2 rounded-full bg-[var(--accent-soft)] px-3.5 text-[13px] font-medium text-accent-text">
+            <ShieldCheck className="size-4" strokeWidth={2} /> A spending firewall for AI agents on NEAR
+          </span>
+        </span>
+        <h1
+          className="mt-7 max-w-[980px] text-[44px] leading-[1.02] font-medium tracking-[-0.045em] text-balance sm:text-[60px] md:text-[88px] md:leading-[0.98]"
+          aria-label={headline}
+        >
+          {headline.split(' ').map((w, i) => (
             <Fragment key={i}>
               <span aria-hidden="true" className="rise-in" style={{ '--d': `${150 + i * 65}ms` } as CSSProperties}>{w}</span>{' '}
             </Fragment>
           ))}
         </h1>
-        <p className="rise-in !block mt-6 max-w-[540px] text-[18px] leading-[30px] text-muted" style={{ '--d': '750ms' } as CSSProperties}>
+        <p className="rise-in !block mt-7 max-w-[560px] text-[18px] leading-[28px] text-muted" style={{ '--d': '750ms' } as CSSProperties}>
           Give your agent a key that can only ask. NearLimit checks every payment on NEAR against your limits, holds the unusual ones for you, and blocks the rest.
         </p>
-        <div className="rise-in !flex mt-9 flex-col items-center gap-3" style={{ '--d': '900ms' } as CSSProperties}>
-          <Link to="/playground" className="btn btn-primary h-[52px] px-8 text-[16px]">Try to trick an agent</Link>
-          <span className="text-[14px] text-muted">Interactive tutorial · no wallet needed</span>
+        <div className="rise-in !flex mt-8 flex-wrap justify-center gap-2.5" style={{ '--d': '880ms' } as CSSProperties}>
+          <Link to="/playground" className="btn btn-primary h-11 rounded-[20px] px-5 text-[15px]">Try to trick an agent <ArrowUpRight className="size-4" /></Link>
+          <Link to="/app" className="btn btn-outline h-11 rounded-[20px] px-5 text-[15px]">Open the app</Link>
         </div>
-        <div className="rise-in !block mt-16 h-[430px] w-full overflow-hidden" style={{ '--d': '1050ms' } as CSSProperties} aria-label="Example conversation between an agent and NearLimit">
+        <span className="rise-in mt-3 text-[13px] text-muted" style={{ '--d': '950ms' } as CSSProperties}>Interactive tutorial · no wallet needed</span>
+        <div
+          className="rise-in !flex mt-12 w-full max-w-[760px] flex-wrap items-center justify-center gap-x-9 gap-y-3 text-[17px] font-semibold tracking-[-0.02em] text-muted opacity-70"
+          style={{ '--d': '1020ms' } as CSSProperties}
+          aria-label="Built with"
+        >
+          {BUILT_WITH.map((b) => <span key={b} className="whitespace-nowrap">{b}</span>)}
+        </div>
+        <div className="rise-in !block mt-14 h-[430px] w-full overflow-hidden" style={{ '--d': '1100ms' } as CSSProperties} aria-label="Example conversation between an agent and NearLimit">
           <Phone thread={HERO_THREAD} animate />
         </div>
       </div>
@@ -743,6 +758,32 @@ function CompareAndFaq() {
   )
 }
 
+function FinalCta() {
+  return (
+    <section className="relative overflow-hidden py-28 md:py-36">
+      <div aria-hidden="true" className="tiles absolute inset-0" />
+      <div data-reveal className="container-page relative flex flex-col items-center text-center">
+        <h2 className="max-w-[760px] text-[40px] leading-[1.04] font-medium tracking-[-0.04em] text-balance md:text-[64px]">See the injection fail.</h2>
+        <p className="mt-4 max-w-[480px] text-[17px] leading-7 text-muted">Watch the tutorial in your browser, or run the same story with real transactions on NEAR testnet.</p>
+        <div className="mt-9 w-full max-w-[560px] rounded-[22px] bg-[var(--accent)] p-[3px] shadow-[0_20px_60px_-20px_var(--accent)]">
+          <div className="rounded-[19px] bg-[var(--ink)] px-5 py-4 text-left font-mono text-[13px] leading-6 text-[var(--ink-fg)] sm:px-6 sm:text-[15px]">
+            <div className="truncate">
+              <span className="text-[var(--accent)]">ShopBot ›</span> request_transfer(<span className="text-[var(--footer-fg)]">"drain.testnet"</span>, <span className="text-[var(--footer-fg)]">"5 NEAR"</span>)<span className="caret ml-0.5 inline-block h-[1.05em] w-[0.5em] translate-y-[0.15em] bg-[var(--footer-fg)]" />
+            </div>
+            <div className="mt-1 flex items-center gap-2 text-[var(--footer-fg)]">
+              <Ban className="size-4 shrink-0" style={{ color: '#F0705F' }} /> Blocked <span className="text-[var(--ink-fg)]">· over per-transaction limit</span>
+            </div>
+          </div>
+        </div>
+        <div className="mt-9 flex flex-wrap justify-center gap-2.5">
+          <Link to="/playground" className="btn btn-primary h-11 rounded-[20px] px-5 text-[15px]">Open the Playground <ArrowUpRight className="size-4" /></Link>
+          <a href={REPO_URL} target="_blank" rel="noreferrer" className="btn btn-outline h-11 rounded-[20px] bg-bg px-5 text-[15px]">Read the code</a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export default function Landing() {
   useAutoReveal()
   return (
@@ -754,14 +795,7 @@ export default function Landing() {
       <Outcomes />
       <Control />
       <CompareAndFaq />
-      <section className="pt-10 pb-4">
-        <div className="container-page">
-          <div data-reveal className="flex flex-col items-center gap-7 rounded-[32px] bg-surface px-6 py-16 text-center">
-            <h2 className="h2 max-w-[560px] md:text-[32px] md:leading-[42px]">See the injection fail on testnet, with real transactions.</h2>
-            <Link to="/playground" className="btn btn-primary h-12 px-6 text-[15px]">Open the Playground <ArrowRight className="size-4" /></Link>
-          </div>
-        </div>
-      </section>
+      <FinalCta />
     </div>
   )
 }

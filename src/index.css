@@ -18,6 +18,18 @@
   --warn: #8f5a0f; /* PRD #A86A12 darkened so badge text passes AA on its tint */
   --danger: #b42318;
   --nav-bg: rgba(255, 255, 255, 0.95);
+  /* Accent from plnty.app: lavender with deep-purple text. Used sparingly. */
+  --accent: #a68aff;
+  --accent-fg: #47146e;
+  --accent-text: #5b2bb5;
+  --accent-soft: rgba(166, 138, 255, 0.16);
+  --ink: #1a1a19;
+  --ink-fg: #cac7bf;
+  --chip: #e6e3dc;
+  --tile: #e9e6e0;
+  --footer-bg: #0d0d0d;
+  --footer-fg: #f7f6f3;
+  --footer-muted: #8f8b84;
   color-scheme: light;
 }
 [data-theme='dark'] {
@@ -34,6 +46,17 @@
   --warn: #e0a443;
   --danger: #f0705f;
   --nav-bg: rgba(14, 14, 16, 0.92);
+  --accent: #b39cff;
+  --accent-fg: #2b0a47;
+  --accent-text: #c9b8ff;
+  --accent-soft: rgba(179, 156, 255, 0.16);
+  --ink: #1e1d1c;
+  --ink-fg: #a8a49d;
+  --chip: #262523;
+  --tile: #1c1b1a;
+  --footer-bg: #080809;
+  --footer-fg: #f7f6f3;
+  --footer-muted: #8f8b84;
   color-scheme: dark;
 }
 
@@ -48,6 +71,10 @@
   --color-ok: var(--ok);
   --color-warn: var(--warn);
   --color-danger: var(--danger);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-text: var(--accent-text);
+  --color-chip: var(--chip);
   --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 }
@@ -65,8 +92,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 :focus-visible {
-  outline: 2px solid var(--fg);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+::selection {
+  background: var(--accent-soft);
 }
 
 @layer components {
@@ -90,6 +120,15 @@ body {
   }
   .btn-primary {
     @apply bg-[var(--btn-bg)] text-[var(--btn-fg)] hover:opacity-85;
+  }
+  .btn-accent {
+    @apply bg-[var(--accent)] text-[var(--accent-fg)] hover:brightness-105;
+  }
+  .btn-outline {
+    @apply border-2 border-fg bg-transparent text-fg hover:bg-surface;
+  }
+  .nav-pill {
+    @apply inline-flex h-7 shrink-0 items-center rounded-full bg-chip px-3 whitespace-nowrap text-[13px] font-medium text-fg transition-colors hover:bg-line-strong;
   }
   .btn-ghost {
     @apply border border-line-strong bg-transparent text-fg hover:bg-surface;
@@ -222,5 +261,56 @@ body {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+}
+
+/* ---- plnty-style live ticker ---- */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee {
+  animation: marquee var(--marquee-dur, 60s) linear infinite;
+}
+.marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ---- tiled-diamond CTA background ---- */
+@keyframes tiles-drift {
+  to {
+    -webkit-mask-position: 112px 64px, center;
+    mask-position: 112px 64px, center;
+  }
+}
+.tiles {
+  background: var(--tile);
+  --tile-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='112' height='64'%3E%3Cg fill='black'%3E%3Cpolygon points='56,10 92,32 56,54 20,32'/%3E%3Cpolygon points='0,-22 36,0 0,22 -36,0'/%3E%3Cpolygon points='112,-22 148,0 112,22 76,0'/%3E%3Cpolygon points='0,42 36,64 0,86 -36,64'/%3E%3Cpolygon points='112,42 148,64 112,86 76,64'/%3E%3C/g%3E%3C/svg%3E");
+  -webkit-mask-image: var(--tile-svg), radial-gradient(ellipse 60% 70% at center, #000 35%, transparent 75%);
+  mask-image: var(--tile-svg), radial-gradient(ellipse 60% 70% at center, #000 35%, transparent 75%);
+  -webkit-mask-size: 112px 64px, 100% 100%;
+  mask-size: 112px 64px, 100% 100%;
+  -webkit-mask-repeat: repeat, no-repeat;
+  mask-repeat: repeat, no-repeat;
+  -webkit-mask-position: 0 0, center;
+  mask-position: 0 0, center;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+  animation: tiles-drift 22s linear infinite;
+}
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+.caret {
+  animation: caret 1.05s steps(1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee,
+  .tiles,
+  .caret {
+    animation: none;
   }
 }

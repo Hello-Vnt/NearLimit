@@ -1,7 +1,6 @@
 import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  Activity,
   ArrowUpRight,
   Ban,
   Check,
@@ -9,15 +8,10 @@ import {
   CircleCheck,
   CirclePause,
   CircleX,
-  FileText,
   KeyRound,
-  ListChecks,
   Pencil,
   ShieldCheck,
   Snowflake,
-  Sparkles,
-  Trash2,
-  Users,
   type LucideIcon,
 } from 'lucide-react'
 import { AGENT_GAS_ALLOWANCE_NEAR, REPO_URL } from '../lib/config'
@@ -25,6 +19,7 @@ import { CountUp, useAutoReveal } from '../components/Reveal'
 import FeatureCarousel from '../components/FeatureCarousel'
 import GuardGalaxy from '../components/GuardGalaxy'
 import HeroSection from '../components/HeroSection'
+import BentoFeatures from '../components/BentoFeatures'
 
 // ---------------------------------------------------------------- shared bits
 
@@ -161,153 +156,15 @@ function Problem() {
   )
 }
 
-// ------------------------------------------------------------ product tabs
-
-type ProductTab = 'approvals' | 'key' | 'limits' | 'activity'
-const PRODUCT_TABS: { id: ProductTab; label: string; icon: LucideIcon }[] = [
-  { id: 'approvals', label: 'Approvals', icon: Sparkles },
-  { id: 'key', label: 'Agent key', icon: KeyRound },
-  { id: 'limits', label: 'Limits', icon: ListChecks },
-  { id: 'activity', label: 'Activity', icon: Activity },
-]
-
-function Row({ k, v, ok }: { k: string; v: ReactNode; ok?: boolean }) {
-  return (
-    <div className="flex items-center justify-between gap-4 py-2.5 text-[14px]">
-      <span className="text-muted">{k}</span>
-      <span className="flex items-center gap-2 text-right">{v}{ok === true && <CircleCheck className="size-4 text-ok" />}{ok === false && <CircleX className="size-4 text-muted" />}</span>
-    </div>
-  )
-}
-
-const PRODUCT: Record<ProductTab, { eyebrow: string; title: string; body: string; points: { icon: LucideIcon; title: string; body: string }[]; caption: string; mock: ReactNode }> = {
-  approvals: {
-    eyebrow: 'Approve in seconds',
-    title: 'Unusual payments arrive with an explanation',
-    body: 'When a request is over a limit or goes to a new account, the contract holds it. You see who, how much and why it looks risky. Nothing leaves the vault without your OK.',
-    points: [
-      { icon: Sparkles, title: 'Plain-English explanation', body: 'Written by NEAR AI Cloud from facts computed in code. The risk level comes from fixed rules.' },
-      { icon: FileText, title: 'On-chain decision', body: 'Approve and reject are both transactions. The hash of what you read is stored with an approval.' },
-    ],
-    caption: 'A pending request, explained and decided in one tap.',
-    mock: (
-      <MockCard icon={CirclePause} title="ShopBot wants to send">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div><span className="mono !text-[15px]">0.8 NEAR</span> <span className="text-muted">to</span> <span className="mono break-all">totally-legit-vendor.testnet</span></div>
-          <span className="badge badge-danger">Risk: High</span>
-        </div>
-        <p className="mt-4 rounded-2xl bg-surface p-4 text-[14px] leading-[22px]">
-          First payment to this account. The memo tells the reader to ignore previous instructions and contains a payment instruction. Held because the receiver is not on the allowlist.
-        </p>
-        <div className="mt-4 flex gap-2">
-          <span className="btn btn-primary"><Ban className="size-3.5" /> Reject</span>
-          <span className="btn btn-ghost">Approve and send</span>
-        </div>
-      </MockCard>
-    ),
-  },
-  key: {
-    eyebrow: 'A key that can only ask',
-    title: 'One method. One contract. No deposits.',
-    body: 'Your browser makes a NEAR function-call access key for the agent. The protocol itself refuses anything outside its permission, so a leaked key is worth almost nothing.',
-    points: [
-      { icon: KeyRound, title: 'Issued in two transactions', body: 'One registers the agent and its policy. One adds the restricted key to your account.' },
-      { icon: Trash2, title: 'Revoked in one', body: 'DeleteKey removes it at the protocol level. The agent is locked out at once.' },
-    ],
-    caption: 'What the agent key is allowed to do.',
-    mock: (
-      <MockCard icon={KeyRound} title="ShopBot’s access key">
-        <div className="divide-y divide-line">
-          <Row k="Can call" v={<span className="mono">request_transfer</span>} ok />
-          <Row k="On contract" v={<span className="mono">NearLimit vault</span>} ok />
-          <Row k="Gas allowance" v={<span className="mono">{AGENT_GAS_ALLOWANCE_NEAR} NEAR</span>} ok />
-          <Row k="Attach NEAR" v="Not allowed" ok={false} />
-          <Row k="Any other method" v="Not allowed" ok={false} />
-          <Row k="Send from your wallet" v="Not allowed" ok={false} />
-        </div>
-      </MockCard>
-    ),
-  },
-  limits: {
-    eyebrow: 'Set the policy once',
-    title: 'Limits the contract enforces on every request',
-    body: 'A limit per payment, a limit per day, an amount above which you are asked, and who the agent may pay. The rules live on-chain, so the agent cannot talk its way around them.',
-    points: [
-      { icon: ListChecks, title: 'Approved, Pending or Blocked', body: 'Inside the limits it is paid at once. Over the hard limit it is blocked. In between, you are asked.' },
-      { icon: Snowflake, title: 'Freeze or pause any time', body: 'Freeze one agent or pause the whole vault. Both take effect on the next request.' },
-    ],
-    caption: 'The ShopBot demo policy.',
-    mock: (
-      <MockCard icon={ListChecks} title="ShopBot’s policy">
-        <div className="grid grid-cols-3 gap-3 text-[13px]">
-          {[['Per payment', '1 NEAR'], ['Per day', '2 NEAR'], ['Ask me above', '0.5 NEAR']].map(([k, v]) => (
-            <div key={k} className="rounded-2xl bg-surface p-3"><div className="text-muted">{k}</div><div className="mono mt-1 !text-[15px]">{v}</div></div>
-          ))}
-        </div>
-        <div className="mt-5 flex items-baseline justify-between text-[13px]"><span className="text-muted">Spent today</span><span className="mono">0.4 of 2 NEAR</span></div>
-        <div className="mt-2 h-2 overflow-hidden rounded-full bg-[var(--border-strong)]"><div className="h-full w-1/5 rounded-full bg-[linear-gradient(90deg,var(--accent),var(--blue))]" /></div>
-        <div className="mt-5 text-[13px] text-muted">Pays without asking</div>
-        <div className="mt-2 flex flex-wrap gap-2">
-          {['coffee.testnet', 'host.testnet'].map((a) => <span key={a} className="mono rounded-full border border-line-strong px-3 py-1">{a}</span>)}
-        </div>
-      </MockCard>
-    ),
-  },
-  activity: {
-    eyebrow: 'See every attempt',
-    title: 'A readable record, including what was refused',
-    body: 'Blocked requests do not vanish. The contract returns the reason and writes an event, so every attempt stays on-chain. The feed updates every three seconds and has a public read-only page.',
-    points: [
-      { icon: Activity, title: 'Live feed and alerts', body: 'A toast appears the moment a request is held or blocked.' },
-      { icon: Users, title: 'Public activity page', body: 'Anyone can open it without a wallet. Each row links to the explorer.' },
-    ],
-    caption: 'The activity feed after a ShopBot run.',
-    mock: (
-      <MockCard icon={Activity} title="Live activity">
-        <ul className="-my-2 divide-y divide-line text-[14px]">
-          {[
-            ['badge-warn', 'Pending', '0.8 NEAR to totally-legit-vendor.testnet', 'receiver is not on the allowlist'],
-            ['badge-danger', 'Blocked', '5 NEAR to drain.testnet', 'over per-transaction limit'],
-            ['badge-ok', 'Approved', '0.3 NEAR to host.testnet', ''],
-            ['badge-ok', 'Approved', '0.1 NEAR to coffee.testnet', ''],
-          ].map(([cls, label, what, why]) => (
-            <li key={what} className="flex items-start gap-3 py-3">
-              <span className={`badge ${cls} w-[84px] shrink-0 justify-center`}>{label}</span>
-              <span className="min-w-0"><span className="mono break-all">{what}</span>{why && <span className="block text-[13px] text-muted">{why}</span>}</span>
-            </li>
-          ))}
-        </ul>
-      </MockCard>
-    ),
-  },
-}
+// ------------------------------------------------------------ features bento
 
 function Product() {
-  const [tab, setTab] = useState<ProductTab>('approvals')
-  const p = PRODUCT[tab]
   return (
-    <section id="how-it-works" className="scroll-mt-20 py-24">
+    <section id="how-it-works" className="scroll-mt-24 py-24">
       <div className="container-page">
         <CenterHead title="Built for how agents actually pay" body="One vault for your funds, one restricted key per agent, and a contract that judges every request." />
-        <div data-reveal style={{ '--d': '120ms' } as CSSProperties} className="mt-10"><Tabs tabs={PRODUCT_TABS} value={tab} onChange={setTab} label="Product areas" /></div>
-        <div key={tab} role="tabpanel" className="bubble-in mt-16 grid items-center gap-12 md:grid-cols-[1fr_1.1fr] md:gap-20">
-          <div>
-            <div className="eyebrow">{p.eyebrow}</div>
-            <h3 className="h2 mt-3 md:text-[30px] md:leading-[40px]">{p.title}</h3>
-            <p className="mt-5 text-[18px] leading-[30px] text-muted">{p.body}</p>
-            <ul className="mt-8 flex flex-col gap-6">
-              {p.points.map((pt) => (
-                <li key={pt.title} className="flex gap-4">
-                  <pt.icon className="mt-0.5 size-5 shrink-0" strokeWidth={1.75} />
-                  <div><div className="text-[17px] font-medium">{pt.title}</div><div className="mt-0.5 text-muted">{pt.body}</div></div>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <figure>
-            <div className="rounded-[32px] bg-surface p-5 sm:p-10">{p.mock}</div>
-            <figcaption className="mt-4 text-center text-[15px] text-muted">{p.caption}</figcaption>
-          </figure>
+        <div className="mt-14">
+          <BentoFeatures />
         </div>
       </div>
     </section>

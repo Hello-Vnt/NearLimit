@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { LogOut, Moon, ShieldCheck, Sun } from 'lucide-react'
+import { LogOut, Moon, Sun } from 'lucide-react'
+import { LogoMark } from './LogoMark'
 import { CONTRACT_ID, explorerAccount } from '../lib/config'
 import { useWallet } from '../lib/wallet'
 
@@ -40,8 +41,8 @@ function useTheme() {
 
 export function Logo() {
   return (
-    <Link to="/" className="flex items-center gap-2 text-[16px] font-medium tracking-[-0.01em]">
-      <ShieldCheck className="size-5" strokeWidth={1.75} />
+    <Link to="/" className="flex items-center gap-2.5 text-[17px] font-semibold tracking-[-0.02em]" aria-label="NearLimit home">
+      <LogoMark className="h-[21px] w-auto" />
       NearLimit
     </Link>
   )

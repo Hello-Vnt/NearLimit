@@ -1,3 +1,5 @@
+<img src="docs/logo.svg" alt="NearLimit logo" width="72" />
+
 # NearLimit
 
 **A spending firewall for AI agents on NEAR.**

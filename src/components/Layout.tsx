@@ -3,10 +3,19 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { ArrowUpRight, LogOut, Moon, Sun, Wallet } from 'lucide-react'
 import { LogoMark } from './LogoMark'
 import CursorLabel from './CursorLabel'
-import { CONTRACT_ID, DEMO_OWNER, REPO_URL, explorerAccount } from '../lib/config'
+import { CONTRACT_ID, DEMO_OWNER, REPO_URL, X_URL, explorerAccount } from '../lib/config'
 import { formatNear, timeAgo } from '../lib/near'
 import { useVault } from '../lib/useVault'
 import { useWallet } from '../lib/wallet'
+
+/** The X (formerly Twitter) mark, drawn inline. */
+function XMark({ className = 'size-3' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="currentColor">
+      <path d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.33l4.37 5.77L17.75 3Zm-1.08 16.17h1.7L7.4 4.74H5.58l11.09 14.43Z" />
+    </svg>
+  )
+}
 
 function useTheme() {
   const [theme, setTheme] = useState<'light' | 'dark'>(() =>
@@ -131,6 +140,9 @@ function Nav() {
       <NavLink to="/playground" className={pill}>Playground</NavLink>
       <a href="/#how-it-works" className="nav-pill">How it works</a>
       <a href={REPO_URL} target="_blank" rel="noreferrer" className="nav-pill gap-1">GitHub <ArrowUpRight className="size-3" /></a>
+      <a href={X_URL} target="_blank" rel="noreferrer" className="nav-pill gap-1.5" aria-label="NearLimit on X">
+        <XMark /> @NearLimitApp
+      </a>
     </>
   )
   return (
@@ -231,12 +243,17 @@ function Footer() {
             { label: 'How it works', href: '/#how-it-works' },
             { label: 'README', href: `${REPO_URL}#readme` },
             { label: 'MIT licence', href: `${REPO_URL}/blob/main/LICENSE` },
+            { label: 'X: @NearLimitApp', href: X_URL },
           ])}
         </div>
 
         <div className="mt-16 flex flex-col justify-between gap-3 border-t border-white/10 pt-6 text-[12px] text-[var(--footer-muted)] sm:flex-row">
           <span className="flex items-center gap-2"><LogoMark className="h-3.5 w-auto text-[var(--footer-fg)]" /> NearLimit · testnet only, not audited</span>
-          <span>Photos: Unsplash · Type: Inter</span>
+          <span className="flex items-center gap-4">
+            <a href={X_URL} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 hover:text-[var(--footer-fg)]"><XMark className="size-3.5" /> @NearLimitApp</a>
+            <a href={REPO_URL} target="_blank" rel="noreferrer" className="hover:text-[var(--footer-fg)]">GitHub</a>
+            <span>Photos: Unsplash · Type: Inter</span>
+          </span>
         </div>
       </div>
     </footer>

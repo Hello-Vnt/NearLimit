@@ -12,6 +12,7 @@ NEAR Hackathon 2026 · Track: AI Security & Defense (also Agent Economy)
 | Contract (testnet) | [`nearlimit.testnet`](https://testnet.nearblocks.io/address/nearlimit.testnet) (deploy tx `BDe8puDWnrTuQwjvtLGpLLnfQBrhqDaFCppv7tDhSwm7`) |
 | Live app | **https://near-limit.vercel.app** (testnet). Try the self-playing demo at [/playground](https://near-limit.vercel.app/playground), no wallet needed |
 | Contract tests | 18 / 18 passing (`cd contract && cargo test`) |
+| X (Twitter) | [@NearLimitApp](https://x.com/NearLimitApp) |
 | Status | Testnet only. Not audited. Do not use with real funds. |
 
 ## The problem

@@ -16,3 +16,4 @@ export const explorerAccount = (id: string) => `${EXPLORER}/address/${id}`
 /** Vault whose real testnet activity the home page shows. Empty hides the feed. */
 export const DEMO_OWNER: string = (import.meta.env.VITE_DEMO_OWNER ?? 'clearglove8618.testnet').trim()
 export const REPO_URL = 'https://github.com/Hello-Vnt/NearLimit'
+export const X_URL = 'https://x.com/NearLimitApp'

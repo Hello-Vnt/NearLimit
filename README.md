@@ -155,8 +155,8 @@ Off-chain and advisory only (`src/lib/explain.ts`, `api/explain.ts`).
 - **Idea heritage**: NearLimit grows out of two tools built for BOT Chain: Contract Watch (live activity alerts) and TxExplain (plain-English transaction explanations). The live feed and the explanation card carry those ideas over. **All code in this repository is new and written for NEAR.**
 - **Built in the hackathon window**: everything in this repository. There is no pre-hackathon code; the first line was written on 14 Nov 2026.
 - **AI-assisted code**: the contract, tests, frontend, serverless function and this README were written with Claude Code (Anthropic) from the author's product spec, then reviewed by the author.
-- **Photos** on the home page are from [Unsplash](https://unsplash.com/license), free to use: Taylor Vick, Scott Graham, rupixen and Annie Spratt. They are loaded from images.unsplash.com.
-- The visual style (Inter, stone palette, pill buttons) is modelled on beside.com. No assets or code were copied.
+- **Photos** on the home page are from [Unsplash](https://unsplash.com/license), free to use: Taylor Vick, Scott Graham, rupixen, Annie Spratt, Amol Tyagi, Shubham Dhage, freestocks, Alex Knight and Jason Leung. They are loaded from images.unsplash.com.
+- The visual style mixes beside.com (stone palette, section layouts) and plnty.app (live ticker, navbar, hero, tiled CTA, footer, lavender accent), set in Inter. No assets or code were copied from either site.
 
 ## License
 

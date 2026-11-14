@@ -219,7 +219,7 @@ function Coach({ root, cue }: { root: HTMLElement | null; cue: Cue | null }) {
       style={{ top: pos?.top ?? 0, left: pos?.left ?? 0, visibility: pos ? 'visible' : 'hidden' }}
       className="pointer-events-none absolute z-30 w-[min(300px,100%)] rounded-2xl bg-[var(--btn-bg)] px-4 py-3 text-[13.5px] leading-5 text-[var(--btn-fg)] shadow-xl shadow-black/20 transition-[top,left] duration-300"
     >
-      {cue.step && <div className="mb-1 text-[11px] font-medium tracking-[0.06em] uppercase opacity-70">{cue.step}</div>}
+      {cue.step && <div className="mb-1 text-[11px] font-semibold tracking-[0.06em] text-[var(--accent-inv)] uppercase">{cue.step}</div>}
       {cue.text}
       {cue.place !== 'inside' && pos && (
         <span
@@ -468,7 +468,7 @@ export default function LiveDemo({ onRunReal }: { onRunReal?: () => void }) {
       {/* autoplay bar */}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-bg px-4 py-2.5">
         <div className="flex items-center gap-2.5 text-[14px]">
-          <span className={`size-2 rounded-full ${auto ? 'animate-pulse bg-ok' : 'bg-[var(--border-strong)]'}`} />
+          <span className={`size-2 rounded-full ${auto ? 'animate-pulse bg-[var(--accent)]' : 'bg-[var(--border-strong)]'}`} />
           {auto ? (
             <span><span className="font-medium">Playing on a loop.</span> <span className="text-muted">Click any invoice or switch to take over.</span></span>
           ) : (
@@ -478,7 +478,7 @@ export default function LiveDemo({ onRunReal }: { onRunReal?: () => void }) {
         {auto ? (
           <button type="button" className="btn btn-ghost h-8" onClick={() => setAuto(false)}><Pause className="size-3.5" /> Pause</button>
         ) : (
-          <button type="button" className="btn btn-primary h-8" onClick={replay}><Play className="size-3.5" /> Watch it play</button>
+          <button type="button" className="btn btn-accent h-8" onClick={replay}><Play className="size-3.5" /> Watch it play</button>
         )}
       </div>
 
@@ -490,9 +490,9 @@ export default function LiveDemo({ onRunReal }: { onRunReal?: () => void }) {
               const done = s.done.has(st.id)
               const active = current?.id === st.id
               return (
-                <li key={st.id} className={`rounded-2xl px-4 py-3 transition-colors ${active ? 'bg-surface' : ''}`} aria-current={active ? 'step' : undefined}>
+                <li key={st.id} className={`rounded-2xl px-4 py-3 transition-colors ${active ? 'bg-[var(--accent-soft)]' : ''}`} aria-current={active ? 'step' : undefined}>
                   <div className="flex items-center gap-3">
-                    <span className={`flex size-6 shrink-0 items-center justify-center rounded-full text-[12px] transition-colors ${done ? 'bg-[var(--btn-bg)] text-[var(--btn-fg)]' : 'mono border border-line-strong text-muted'}`}>
+                    <span className={`flex size-6 shrink-0 items-center justify-center rounded-full text-[12px] transition-colors ${done ? 'bg-[var(--accent)] text-[var(--accent-fg)]' : 'mono border border-line-strong text-muted'}`}>
                       {done ? <Check className="size-3.5" strokeWidth={2.5} /> : i + 1}
                     </span>
                     <span className={`text-[15px] font-medium ${done && !active ? 'text-muted line-through decoration-line-strong' : ''}`}>{st.title}</span>
@@ -506,9 +506,9 @@ export default function LiveDemo({ onRunReal }: { onRunReal?: () => void }) {
                 <div className="text-[15px] font-medium">You’ve seen all of it.</div>
                 <p className="mt-1 text-[14px] text-muted">Now run the same story with real transactions on NEAR testnet.</p>
                 {onRunReal ? (
-                  <button type="button" onClick={onRunReal} className="btn btn-primary mt-3">Run it on testnet <ArrowRight className="size-3.5" /></button>
+                  <button type="button" onClick={onRunReal} className="btn btn-accent mt-3">Run it on testnet <ArrowRight className="size-3.5" /></button>
                 ) : (
-                  <Link to="/playground#testnet" className="btn btn-primary mt-3">Run it on testnet <ArrowRight className="size-3.5" /></Link>
+                  <Link to="/playground#testnet" className="btn btn-accent mt-3">Run it on testnet <ArrowRight className="size-3.5" /></Link>
                 )}
               </li>
             )}
@@ -547,9 +547,9 @@ export default function LiveDemo({ onRunReal }: { onRunReal?: () => void }) {
                   setCustomOpen((o) => !o)
                 }}
                 aria-expanded={customOpen}
-                className="flex items-center gap-3 rounded-2xl border border-dashed border-line-strong px-4 py-3 text-left text-[14px] font-medium hover:bg-surface"
+                className="flex items-center gap-3 rounded-2xl border border-dashed border-[var(--coral)] px-4 py-3 text-left text-[14px] font-medium hover:bg-[var(--coral-soft)]"
               >
-                <PenLine className="size-4 text-muted" strokeWidth={1.75} /> Write your own attack
+                <PenLine className="size-4 text-coral-text" strokeWidth={1.75} /> Write your own attack
               </button>
               {customOpen && (
                 <form onSubmit={runCustom} className="bubble-in flex flex-col gap-3 rounded-2xl bg-surface p-4">
@@ -568,7 +568,7 @@ export default function LiveDemo({ onRunReal }: { onRunReal?: () => void }) {
                     <textarea id="demo-memo" className="input !text-[13px] leading-5" rows={4} maxLength={280} value={custom.memo} onChange={(e) => setCustom({ ...custom, memo: e.target.value })} />
                   </div>
                   {customError && <div className="text-[13px] text-danger">{customError}</div>}
-                  <button className="btn btn-primary self-start" disabled={busyView}>Give it to ShopBot</button>
+                  <button className="btn btn-coral self-start" disabled={busyView}>Give it to ShopBot</button>
                 </form>
               )}
             </div>
@@ -601,7 +601,7 @@ export default function LiveDemo({ onRunReal }: { onRunReal?: () => void }) {
                 <Tip text={TIPS.vault} focusable><span className="underline decoration-dotted underline-offset-2">Vault <span className="mono !text-[12px] text-fg">{formatNear(s.vault.balance, 2)}</span> NEAR</span></Tip>
               </div>
               <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-[var(--border-strong)]">
-                <div className="h-full rounded-full bg-fg transition-[width] duration-500" style={{ width: `${pct}%` }} />
+                <div className="h-full rounded-full bg-[linear-gradient(90deg,var(--accent),var(--blue))] transition-[width] duration-500" style={{ width: `${pct}%` }} />
               </div>
             </div>
             <button type="button" onClick={() => { takeOver(); reset() }} disabled={busyView && !auto} className="btn h-8 px-3 text-muted hover:text-fg" aria-label="Reset the demo">

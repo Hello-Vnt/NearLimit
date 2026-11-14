@@ -23,6 +23,16 @@
   --accent-fg: #47146e;
   --accent-text: #5b2bb5;
   --accent-soft: rgba(166, 138, 255, 0.16);
+  --accent-inv: #c4b0ff; /* accent on inverted (dark) bubbles */
+  /* Supporting accents: coral for attacks and alerts, blue for agents and info. */
+  --coral: #ff8a6b;
+  --coral-fg: #5a1a0b;
+  --coral-text: #c2441f;
+  --coral-soft: rgba(255, 138, 107, 0.16);
+  --blue: #6cb6ff;
+  --blue-fg: #0b2e57;
+  --blue-text: #1f68c4;
+  --blue-soft: rgba(108, 182, 255, 0.18);
   --ink: #1a1a19;
   --ink-fg: #cac7bf;
   --chip: #e6e3dc;
@@ -50,6 +60,15 @@
   --accent-fg: #2b0a47;
   --accent-text: #c9b8ff;
   --accent-soft: rgba(179, 156, 255, 0.16);
+  --accent-inv: #5b2bb5; /* inverted bubbles are light in dark mode */
+  --coral: #ff9a7e;
+  --coral-fg: #3d1105;
+  --coral-text: #ffab94;
+  --coral-soft: rgba(255, 154, 126, 0.16);
+  --blue: #7cc0ff;
+  --blue-fg: #06213f;
+  --blue-text: #9ccfff;
+  --blue-soft: rgba(124, 192, 255, 0.16);
   --ink: #1e1d1c;
   --ink-fg: #a8a49d;
   --chip: #262523;
@@ -74,6 +93,10 @@
   --color-accent: var(--accent);
   --color-accent-fg: var(--accent-fg);
   --color-accent-text: var(--accent-text);
+  --color-coral: var(--coral);
+  --color-coral-text: var(--coral-text);
+  --color-blue: var(--blue);
+  --color-blue-text: var(--blue-text);
   --color-chip: var(--chip);
   --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
@@ -110,7 +133,7 @@ body {
     @apply text-[24px] leading-[31px] font-normal tracking-[-0.02em] text-balance;
   }
   .eyebrow {
-    @apply text-[15px] font-medium text-muted;
+    @apply text-[15px] font-medium text-accent-text;
   }
   .stat {
     @apply text-[48px] leading-[48px] font-light tracking-[-0.02em] tabular-nums;
@@ -123,6 +146,15 @@ body {
   }
   .btn-accent {
     @apply bg-[var(--accent)] text-[var(--accent-fg)] hover:brightness-105;
+  }
+  .btn-coral {
+    @apply bg-[var(--coral)] text-[var(--coral-fg)] hover:brightness-105;
+  }
+  .btn-blue {
+    @apply bg-[var(--blue)] text-[var(--blue-fg)] hover:brightness-105;
+  }
+  .eyebrow-accent {
+    @apply text-[15px] font-medium text-accent-text;
   }
   .btn-outline {
     @apply border-2 border-fg bg-transparent text-fg hover:bg-surface;
@@ -311,6 +343,43 @@ body {
   .marquee,
   .tiles,
   .caret {
+    animation: none;
+  }
+}
+
+/* ---- feature carousel ---- */
+@keyframes progress-fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+.progress-fill {
+  animation: progress-fill linear forwards;
+}
+@keyframes cursor-drift {
+  0% {
+    transform: translate(40px, 30px);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-10px, -6px);
+  }
+  100% {
+    transform: translate(6px, 4px);
+  }
+}
+.cursor-drift {
+  animation: cursor-drift 6.5s cubic-bezier(0.3, 0.7, 0.2, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .progress-fill,
+  .cursor-drift {
     animation: none;
   }
 }

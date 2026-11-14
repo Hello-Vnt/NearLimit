@@ -104,7 +104,7 @@ function Bubble({ line }: { line: Line }) {
     <div className="bubble-in card mx-auto w-full max-w-[520px] p-5 text-center">
       <div className="text-[18px] font-light tracking-[-0.01em]">The agent was tricked. The wallet was still safe.</div>
       <div className="mt-3 flex flex-wrap justify-center gap-2">
-        {line.pendingId !== null && <Link className="btn btn-primary" to={`/app/inbox/${line.pendingId}`}>Review the pending payment</Link>}
+        {line.pendingId !== null && <Link className="btn btn-accent" to={`/app/inbox/${line.pendingId}`}>Review the pending payment</Link>}
         <Link className="btn btn-ghost" to="/app">Open dashboard</Link>
       </div>
     </div>
@@ -241,7 +241,7 @@ function RealRun() {
               <input id="pg-key" className="input mono" type="password" autoComplete="off" placeholder="ed25519:…" value={secretInput} onChange={(e) => setSecretInput(e.target.value)} />
               {formError && <div className="mt-1 text-[13px] text-danger">{formError}</div>}
             </div>
-            <div><button className="btn btn-primary">Use this key</button></div>
+            <div><button className="btn btn-accent">Use this key</button></div>
           </form>
         ) : (
           <>
@@ -265,7 +265,7 @@ function RealRun() {
               </ul>
             )}
             <div className="mt-5 flex gap-2">
-              <button className="btn btn-primary" onClick={run} disabled={running || !CONTRACT_ID}>
+              <button className="btn btn-accent" onClick={run} disabled={running || !CONTRACT_ID}>
                 {lines.length ? <RotateCcw className="size-3.5" /> : <Play className="size-3.5" />}
                 {running ? 'ShopBot is working…' : lines.length ? 'Run again' : 'Run ShopBot'}
               </button>
@@ -297,7 +297,7 @@ function LiveFeed() {
     <div className="mt-12 overflow-hidden rounded-3xl border border-line-strong">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-5 py-3.5">
         <div className="flex items-center gap-2 text-[15px] font-medium">
-          <span className="size-2 animate-pulse rounded-full bg-ok" /> Live on NEAR testnet
+          <span className="size-2 animate-pulse rounded-full bg-[var(--accent)]" /> Live on NEAR testnet
           <InfoTip text="Real requests from the demo vault, read straight from the contract every 3 seconds. These are actual testnet transactions, not the simulation." label="About the live feed" />
         </div>
         <Link to={`/v/${DEMO_OWNER}`} className="text-[13px] text-muted hover:text-fg">Full public activity page →</Link>
@@ -339,7 +339,7 @@ export default function Playground() {
               role="tab"
               aria-selected={mode === t.id}
               onClick={() => choose(t.id)}
-              className={`flex w-full items-center justify-center gap-2 rounded-full px-3 py-2 text-left transition-colors ${mode === t.id ? 'bg-surface text-fg' : 'text-muted hover:text-fg'}`}
+              className={`flex w-full items-center justify-center gap-2 rounded-full px-3 py-2 text-left transition-colors ${mode === t.id ? 'bg-[var(--accent-soft)] text-accent-text' : 'text-muted hover:text-fg'}`}
             >
               <t.icon className="size-4 shrink-0" strokeWidth={1.75} />
               <span className="leading-[18px]">

@@ -29,7 +29,7 @@ export default function InboxDetail() {
   }, [req, activity])
 
   if (!accountId) {
-    return <div className="container-page py-20 text-center"><h1 className="h2">Connect a wallet to review requests</h1><button className="btn btn-primary mt-6" onClick={connect}>Connect wallet</button></div>
+    return <div className="container-page py-20 text-center"><h1 className="h2">Connect a wallet to review requests</h1><button className="btn btn-accent mt-6" onClick={connect}>Connect wallet</button></div>
   }
   if (loading) return <div className="container-page py-24 text-center text-muted">Loading request…</div>
   if (!req) {
@@ -37,7 +37,7 @@ export default function InboxDetail() {
       <div className="container-page py-20 text-center">
         <h1 className="h2">This request is no longer pending</h1>
         <p className="mt-2 text-muted">It was approved, rejected, or its agent was removed.</p>
-        <Link to="/app" className="btn btn-primary mt-6">Back to dashboard</Link>
+        <Link to="/app" className="btn btn-accent mt-6">Back to dashboard</Link>
       </div>
     )
   }
@@ -77,7 +77,7 @@ export default function InboxDetail() {
 
         <div className="card mt-4 p-5">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-2 text-[15px] font-medium"><Sparkles className="size-4" strokeWidth={1.75} /> Explanation</div>
+            <div className="flex items-center gap-2 text-[15px] font-medium"><Sparkles className="size-4 text-accent-text" strokeWidth={1.75} /> Explanation</div>
             {ex && <Badge tone={RISK_TONE[ex.risk]}>Risk: {ex.risk}</Badge>}
           </div>
           {ex ? (

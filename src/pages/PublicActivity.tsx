@@ -38,7 +38,7 @@ export default function PublicActivity() {
               {vault.agents.map((a) => <AgentCard key={a.public_key} agent={a} owner={owner} readOnly />)}
             </div>
           )}
-          <Section title="Live activity" action={<span className="flex items-center gap-2 text-[12px] text-muted"><span className="size-1.5 animate-pulse rounded-full bg-ok" /> updates every 3s</span>}>
+          <Section title="Live activity" action={<span className="flex items-center gap-2 text-[12px] text-muted"><span className="size-1.5 animate-pulse rounded-full bg-[var(--accent)]" /> updates every 3s</span>}>
             <ActivityFeed items={activity} freshIds={freshIds} />
           </Section>
         </div>

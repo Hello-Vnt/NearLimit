@@ -114,7 +114,7 @@ function Reveal({ stash, policy }: { stash: StoredAgentKey; policy: Policy | nul
 
   return (
     <div className="mx-auto max-w-[640px]">
-      <KeyRound className="size-6" strokeWidth={1.5} />
+      <span className="flex size-11 items-center justify-center rounded-2xl bg-[var(--accent-soft)] text-accent-text"><KeyRound className="size-5" strokeWidth={1.75} /></span>
       <h1 className="h2 mt-4">{ready ? `${stash.name}’s key is ready` : `Setting up ${stash.name}`}</h1>
       <ul className="mt-5 flex flex-col gap-2">
         <Check2 ok={registered}>Agent and policy registered in NearLimit{registered === false && policy && (
@@ -159,7 +159,7 @@ function Reveal({ stash, policy }: { stash: StoredAgentKey; policy: Policy | nul
       </div>
 
       <div className="mt-6 flex flex-wrap gap-2">
-        <button className="btn btn-primary" disabled={!ready} onClick={() => done(true)}>Use this key in the Playground</button>
+        <button className="btn btn-accent" disabled={!ready} onClick={() => done(true)}>Use this key in the Playground</button>
         <button className="btn btn-ghost" onClick={() => done(false)}>{ready ? 'I saved it, go to dashboard' : 'Cancel and discard key'}</button>
       </div>
       {!ready && <p className="mt-3 text-[13px] text-muted">Waiting for both transactions to land on testnet. This page checks every 3 seconds.</p>}
@@ -181,7 +181,7 @@ export default function NewAgent() {
     return (
       <div className="container-page py-20 text-center">
         <h1 className="h2">Connect a wallet to add an agent</h1>
-        <button className="btn btn-primary mt-6" onClick={connect}>Connect wallet</button>
+        <button className="btn btn-accent mt-6" onClick={connect}>Connect wallet</button>
       </div>
     )
   }
@@ -211,7 +211,7 @@ export default function NewAgent() {
         <Link to="/app" className="text-[13px] text-muted hover:text-fg">← Dashboard</Link>
         <div className="mt-3 flex flex-wrap items-end justify-between gap-3">
           <h1 className="h2">Add an agent</h1>
-          <button type="button" className="btn btn-ghost" onClick={() => { setForm(SHOPBOT); setTouched(false) }}>Fill with the ShopBot demo policy</button>
+          <button type="button" className="btn bg-[var(--blue-soft)] text-blue-text hover:brightness-95" onClick={() => { setForm(SHOPBOT); setTouched(false) }}>Fill with the ShopBot demo policy</button>
         </div>
         <p className="mt-2 text-muted">Set what this agent may spend. Then your browser makes a key that can only ask NearLimit for payments.</p>
 
@@ -250,7 +250,7 @@ export default function NewAgent() {
             Your wallet will ask you to approve two transactions: one registers the agent and its policy in NearLimit, one adds a restricted key to your account. The key can only call <span className="mono">request_transfer</span>, cannot attach NEAR, and can burn at most {AGENT_GAS_ALLOWANCE_NEAR} NEAR in gas.
           </div>
           <div>
-            <button className="btn btn-primary" disabled={!!busy || !CONTRACT_ID}>{busy ? 'Waiting for wallet…' : 'Create agent and key'}</button>
+            <button className="btn btn-accent h-10 px-5" disabled={!!busy || !CONTRACT_ID}>{busy ? 'Waiting for wallet…' : 'Create agent and key'}</button>
           </div>
         </form>
       </div>

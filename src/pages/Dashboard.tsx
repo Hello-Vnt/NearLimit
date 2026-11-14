@@ -23,7 +23,7 @@ function CreateVault({ onDone }: { onDone: () => void }) {
   const ok = validAmount(amount) && BigInt(parseNear(amount)) >= BigInt(parseNear('0.5'))
   return (
     <div className="card mx-auto max-w-[520px] p-8">
-      <Wallet className="size-6" strokeWidth={1.5} />
+      <span className="flex size-11 items-center justify-center rounded-2xl bg-[var(--accent-soft)] text-accent-text"><Wallet className="size-5" strokeWidth={1.75} /></span>
       <h1 className="h2 mt-4">Create your vault</h1>
       <p className="mt-2 text-muted">Deposit testnet NEAR into NearLimit. Your agents spend from this vault, never from your wallet. You can withdraw any time.</p>
       <form
@@ -37,7 +37,7 @@ function CreateVault({ onDone }: { onDone: () => void }) {
           <label className="field-label" htmlFor="first-deposit">Amount in NEAR (minimum 0.5)</label>
           <input id="first-deposit" className="input mono" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} />
         </div>
-        <button className="btn btn-primary h-10" disabled={!ok || !!busy}>{busy ? 'Waiting for wallet…' : 'Create vault'}</button>
+        <button className="btn btn-accent h-10" disabled={!ok || !!busy}>{busy ? 'Waiting for wallet…' : 'Create vault'}</button>
       </form>
     </div>
   )
@@ -53,7 +53,7 @@ function BalanceCard({ vault, refresh }: { vault: Vault; refresh: () => void }) 
       <div className="eyebrow">Vault balance</div>
       <div className="stat mt-3">{formatNear(vault.balance, 3)} <span className="text-[20px] text-muted">NEAR</span></div>
       <div className="mt-5 flex flex-wrap gap-2">
-        <button className="btn btn-primary" onClick={() => setMode(mode === 'deposit' ? null : 'deposit')}>Deposit</button>
+        <button className="btn btn-accent" onClick={() => setMode(mode === 'deposit' ? null : 'deposit')}>Deposit</button>
         <button className="btn btn-ghost" onClick={() => setMode(mode === 'withdraw' ? null : 'withdraw')}>Withdraw</button>
         <button
           className={`btn ${vault.paused ? 'btn-primary' : 'btn-danger'}`}
@@ -101,7 +101,7 @@ export function SpendCard({ vault }: { vault: Vault }) {
         <span className="text-[15px] text-muted">of {formatNear(limit, 3)} NEAR daily limit</span>
       </div>
       <div className="mt-5 h-2 overflow-hidden rounded-full bg-[var(--border-strong)]" role="progressbar" aria-valuenow={Math.round(pct)} aria-valuemin={0} aria-valuemax={100} aria-label="Today's spend against the daily limit">
-        <div className="h-full rounded-full bg-fg transition-[width] duration-500" style={{ width: `${pct}%` }} />
+        <div className="h-full rounded-full bg-[linear-gradient(90deg,var(--accent),var(--blue))] transition-[width] duration-500" style={{ width: `${pct}%` }} />
       </div>
       <div className="mt-auto grid grid-cols-2 gap-4 pt-5 text-[13px] text-muted">
         <div><div className="mono text-[15px] text-fg">{formatNear(vault.total_blocked, 3)} NEAR</div>blocked or rejected, all time</div>
@@ -134,7 +134,7 @@ export function AgentCard({ agent, owner, refresh, readOnly }: { agent: Agent; o
         <div><dt className="text-muted">Ask me above</dt><dd><Near yocto={p.approval_threshold} /></dd></div>
       </dl>
       <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[var(--border-strong)]">
-        <div className="h-full rounded-full bg-fg" style={{ width: `${pct}%` }} />
+        <div className="h-full rounded-full bg-[var(--blue)]" style={{ width: `${pct}%` }} />
       </div>
       <div className="mt-1.5 text-[12px] text-muted">
         <span className="mono text-[12px]">{formatNear(spent, 3)}</span> spent today ·{' '}
@@ -186,7 +186,7 @@ export default function Dashboard() {
         <div className="card mx-auto max-w-[520px] p-8 text-center">
           <h1 className="h2">Connect a testnet wallet</h1>
           <p className="mt-2 text-muted">Your vault, agents and approvals live on NEAR testnet under your account.</p>
-          <button className="btn btn-primary mt-6" onClick={connect} disabled={!ready}>Connect wallet</button>
+          <button className="btn btn-accent mt-6" onClick={connect} disabled={!ready}>Connect wallet</button>
         </div>
       </div>
     )
@@ -211,7 +211,7 @@ export default function Dashboard() {
             <SpendCard vault={vault} />
           </div>
 
-          <Section title={`Needs your approval${vault.pending.length ? ` (${vault.pending.length})` : ''}`}>
+          <Section title="Needs your approval" action={vault.pending.length ? <span className="rounded-full bg-[var(--coral)] px-2 py-0.5 text-[12px] font-semibold text-[var(--coral-fg)]">{vault.pending.length} waiting</span> : undefined}>
             {vault.pending.length === 0 ? (
               <div className="px-5 py-8 text-center text-[14px] text-muted">Nothing is waiting. Payments over a limit or to a new account show up here.</div>
             ) : (
@@ -224,7 +224,7 @@ export default function Dashboard() {
                         <Near yocto={r.amount} /> <span className="text-muted">to</span> <span className="mono break-all">{r.receiver_id}</span>
                         <span className="block text-[13px] text-muted">{r.agent_name} · {r.reason} · {timeAgo(r.created_at_ms)}</span>
                       </span>
-                      <span className="inline-flex items-center gap-1 text-[13px] font-medium">Review <ChevronRight className="size-4" /></span>
+                      <span className="inline-flex items-center gap-1 text-[13px] font-medium text-accent-text">Review <ChevronRight className="size-4" /></span>
                     </Link>
                   </li>
                 ))}
@@ -235,7 +235,7 @@ export default function Dashboard() {
           <div>
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-[15px] font-medium">Agents</h2>
-              <Link to="/app/agents/new" className="btn btn-primary"><Plus className="size-3.5" /> Add agent</Link>
+              <Link to="/app/agents/new" className="btn btn-accent"><Plus className="size-3.5" /> Add agent</Link>
             </div>
             {vault.agents.length === 0 ? (
               <div className="card p-8 text-center text-[14px] text-muted">
@@ -248,7 +248,7 @@ export default function Dashboard() {
             )}
           </div>
 
-          <Section title="Live activity" action={<span className="flex items-center gap-2 text-[12px] text-muted"><span className="size-1.5 animate-pulse rounded-full bg-ok" /> updates every 3s</span>}>
+          <Section title="Live activity" action={<span className="flex items-center gap-2 text-[12px] text-muted"><span className="size-1.5 animate-pulse rounded-full bg-[var(--accent)]" /> updates every 3s</span>}>
             <ActivityFeed items={activity} freshIds={freshIds} />
           </Section>
         </div>

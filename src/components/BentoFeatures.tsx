@@ -23,6 +23,7 @@ import {
 } from 'lucide-react'
 import { LogoMark } from './LogoMark'
 import { BotMascot } from './BotMascot'
+import { CursorBadge } from './CursorBadge'
 
 /*
  * Bento grid after amplemarket.com: four cards with a centred heading and a
@@ -191,11 +192,12 @@ function DecideCard() {
             </div>
           </div>
 
-          <MousePointer2
-            className="pointer-events-none absolute size-6 fill-[var(--fg)] text-[var(--bg)] drop-shadow transition-all duration-700 ease-out"
-            style={step >= 2 ? { left: 64, top: 192 } : { left: '72%', top: 20 }}
-            strokeWidth={1.5}
-          />
+          <div
+            className="pointer-events-none absolute z-10 transition-all duration-700 ease-out"
+            style={step >= 2 ? { left: 58, top: 186 } : { left: '70%', top: 14 }}
+          >
+            <CursorBadge label="You" size={34} />
+          </div>
         </div>
       </div>
     </Card>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { CursorBadge } from './CursorBadge'
 
 // Photos: Unsplash (unsplash.com/license), credited in the README.
 const unsplash = (id: string) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1600&h=900&q=70`
@@ -152,16 +153,8 @@ export default function FeatureCarousel() {
               {s.word}
             </span>
           </div>
-          <div key={`c${i}`} className="cursor-drift pointer-events-none absolute top-[62%] left-[66%] hidden sm:block" aria-hidden="true">
-            <svg viewBox="0 0 32 32" className="size-9 drop-shadow-lg">
-              <path d="M5 3l22 11-9.5 2.6L13 26z" fill={`var(--${s.cursor.tone === 'accent' ? 'accent' : s.cursor.tone})`} stroke="#0b0b0c" strokeWidth="2.2" strokeLinejoin="round" />
-            </svg>
-            <span
-              className="ml-6 inline-block rounded-xl px-3 py-1 text-[15px] font-medium shadow-lg"
-              style={{ background: `var(--${s.cursor.tone})`, color: `var(--${s.cursor.tone === 'accent' ? 'accent' : s.cursor.tone}-fg)` }}
-            >
-              {s.cursor.label}
-            </span>
+          <div key={`c${i}`} className="cursor-drift pointer-events-none absolute top-[60%] left-[64%] hidden sm:block" aria-hidden="true">
+            <CursorBadge label={s.cursor.label} size={46} />
           </div>
         </div>
 

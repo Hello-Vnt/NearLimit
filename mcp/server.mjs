@@ -30,7 +30,7 @@ if (existsSync(envFile)) {
 let file = {}
 if (process.env.AGENT_KEY_FILE) file = JSON.parse(readFileSync(process.env.AGENT_KEY_FILE, 'utf8'))
 
-const CONTRACT = process.env.NEARLIMIT_CONTRACT || file.contract || process.env.VITE_CONTRACT_ID
+const CONTRACT = process.env.NEARLIMIT_CONTRACT || file.contract || process.env.VITE_CONTRACT_ID || 'nearlimit.testnet'
 const OWNER = process.env.AGENT_OWNER || file.owner
 const SECRET = process.env.AGENT_KEY || file.private_key
 const RPC = process.env.VITE_RPC_URL || 'https://test.rpc.fastnear.com'

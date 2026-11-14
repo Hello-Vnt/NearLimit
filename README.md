@@ -10,7 +10,7 @@ NEAR Hackathon 2026 · Track: AI Security & Defense (also Agent Economy)
 | | |
 |---|---|
 | Contract (testnet) | [`nearlimit.testnet`](https://testnet.nearblocks.io/address/nearlimit.testnet) (deploy tx `BDe8puDWnrTuQwjvtLGpLLnfQBrhqDaFCppv7tDhSwm7`) |
-| Live app | Not hosted yet. Runs locally in about two minutes, see [Quick look](#quick-look-no-wallet-needed) |
+| Live app | **https://near-limit.vercel.app** (testnet). Try the self-playing demo at [/playground](https://near-limit.vercel.app/playground), no wallet needed |
 | Contract tests | 18 / 18 passing (`cd contract && cargo test`) |
 | Status | Testnet only. Not audited. Do not use with real funds. |
 
@@ -70,9 +70,8 @@ You need a NEAR **testnet** wallet (MyNearWallet or Meteor) with a few test NEAR
 ### From the command line
 
 ```bash
-cp .env.example .env    # set NEARLIMIT_CONTRACT, AGENT_OWNER, AGENT_KEY
 npm install
-npm run agent:demo      # or: npm run agent:demo -- shopbot.agentkey.json
+npm run agent:demo -- shopbot.agentkey.json   # the key file from the app's key screen
 ```
 
 It runs the same story with real testnet transactions and then tries three ways out of the sandbox: calling `withdraw`, attaching a deposit, and sending NEAR directly. All three must be rejected by the protocol.
@@ -163,12 +162,11 @@ cargo near deploy build-non-reproducible-wasm <contract-account>.testnet without
 
 # App
 cd ..
-cp .env.example .env                         # set VITE_CONTRACT_ID
 npm install
 npm run dev
 ```
 
-Deploy the app to Vercel as a Vite project. Set `VITE_CONTRACT_ID`, and optionally `NEAR_AI_API_KEY` (plus `NEAR_AI_MODEL` / `NEAR_AI_BASE_URL`) for the explanation function in `api/explain.ts`.
+No `.env` is needed: the app, CLI demo and MCP server default to `nearlimit.testnet`. To host it, deploy to Vercel as a Vite project (the live copy is at https://near-limit.vercel.app). Optional settings: `VITE_CONTRACT_ID` (another contract), `VITE_DEMO_OWNER` (the vault shown in the live ticker), and `NEAR_AI_API_KEY` (plus `NEAR_AI_MODEL` / `NEAR_AI_BASE_URL`) for AI-written explanations in `api/explain.ts`; without it the app uses rules-only explanations.
 
 ## Contract
 

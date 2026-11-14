@@ -1,0 +1,21 @@
+// Plain-English explanations shown in tooltips.
+export const TIPS = {
+  approved: 'Approved: within every limit and the receiver is allowed, so the contract sent the NEAR right away.',
+  pending: 'Pending: nothing has moved. The payment waits until the owner approves or rejects it.',
+  blocked: 'Blocked: refused by the policy and logged on-chain with the reason. ShopBot should not retry.',
+  perTx: 'Limit per payment. Anything above it is blocked outright, even if the owner is online.',
+  daily: 'Daily limit. Once spending for the UTC day would pass it, further payments wait for the owner. Resets at 00:00 UTC.',
+  threshold: 'Ask-me threshold. Single payments above it wait for the owner, even to known accounts.',
+  allowlist: 'Accounts ShopBot may pay without asking. Payments to anyone else wait for the owner.',
+  vault: 'NEAR held by the NearLimit contract. ShopBot spends from here, never from the owner’s wallet.',
+  agentKey: 'A NEAR function-call key. It can only call request_transfer on NearLimit, cannot attach NEAR, and can burn at most 0.25 NEAR in gas.',
+  freeze: 'Freeze one agent. Its key still exists, but the contract blocks every request until you unfreeze it.',
+  pause: 'Pause the whole vault. Every agent is blocked at once. On-chain, this is one transaction.',
+  risk: 'The risk level comes from fixed rules in code: first payment, unknown account, size against the average, and instruction-like text in the memo. The AI only writes the sentence.',
+  poisoned: 'This memo hides an instruction aimed at the AI reading it, a prompt injection. Watch what ShopBot does with it.',
+  hijacked: 'This is the prompt injection working: ShopBot obeyed text inside the invoice instead of paying it. A real LLM agent can fail the same way.',
+  custom: 'Write any invoice memo. ShopBot follows every “send X NEAR to Y” it finds, just like a naive agent. See whether you can get anything past the policy.',
+  protocol: 'Refused by the NEAR protocol itself, before the contract even runs. The agent key is only allowed to call request_transfer.',
+  simulation: 'Runs in your browser using the contract’s exact rules, in the same order. Receiver checks are real testnet lookups. No wallet and no real transfers.',
+  realRun: 'Every request is a real transaction on NEAR testnet, signed with the restricted agent key.',
+} as const

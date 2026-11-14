@@ -1,0 +1,162 @@
+@import 'tailwindcss';
+@import '@near-wallet-selector/modal-ui/styles.css';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* Stone palette taken from beside.com. Status colours are for badges and dots only. */
+:root {
+  --bg: #ffffff;
+  --surface: #f7f6f3;
+  --surface-raised: #fefdfb;
+  --fg: #1e1d1c;
+  --muted: #6f6c66; /* PRD #78756F darkened one step so it passes AA on --surface */
+  --border: rgba(30, 29, 28, 0.08);
+  --border-strong: rgba(14, 14, 16, 0.16);
+  --btn-bg: #1e1d1c;
+  --btn-fg: #f7f6f3;
+  --ok: #2a7347;
+  --warn: #8f5a0f; /* PRD #A86A12 darkened so badge text passes AA on its tint */
+  --danger: #b42318;
+  --nav-bg: rgba(255, 255, 255, 0.95);
+  color-scheme: light;
+}
+[data-theme='dark'] {
+  --bg: #0e0e10;
+  --surface: #1e1d1c;
+  --surface-raised: #262523;
+  --fg: #f7f6f3;
+  --muted: #a8a49d;
+  --border: rgba(247, 246, 243, 0.08);
+  --border-strong: rgba(247, 246, 243, 0.16);
+  --btn-bg: #f7f6f3;
+  --btn-fg: #1e1d1c;
+  --ok: #5cc28a;
+  --warn: #e0a443;
+  --danger: #f0705f;
+  --nav-bg: rgba(14, 14, 16, 0.92);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-raised: var(--surface-raised);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-danger: var(--danger);
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  overflow-x: clip;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 24px;
+  -webkit-font-smoothing: antialiased;
+}
+:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-[1120px] px-5 sm:px-8;
+  }
+  .h1 {
+    @apply text-[36px] leading-[45px] font-normal tracking-[-0.03em] text-balance;
+  }
+  .h2 {
+    @apply text-[24px] leading-[31px] font-normal tracking-[-0.02em] text-balance;
+  }
+  .eyebrow {
+    @apply text-[15px] font-medium text-muted;
+  }
+  .stat {
+    @apply text-[48px] leading-[48px] font-light tracking-[-0.02em] tabular-nums;
+  }
+  .btn {
+    @apply inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-full px-4 text-[13px] font-medium whitespace-nowrap transition-opacity select-none disabled:cursor-not-allowed disabled:opacity-45;
+  }
+  .btn-primary {
+    @apply bg-[var(--btn-bg)] text-[var(--btn-fg)] hover:opacity-85;
+  }
+  .btn-ghost {
+    @apply border border-line-strong bg-transparent text-fg hover:bg-surface;
+  }
+  .btn-danger {
+    @apply border border-line-strong bg-transparent text-danger hover:bg-surface;
+  }
+  .card {
+    @apply rounded-2xl border border-line bg-surface;
+  }
+  .field-label {
+    @apply mb-1.5 block text-[13px] font-medium text-fg;
+  }
+  .input {
+    @apply h-10 w-full rounded-xl border border-line-strong bg-bg px-3 text-[15px] text-fg placeholder:text-muted;
+  }
+  textarea.input {
+    @apply h-auto py-2;
+  }
+  .mono {
+    @apply font-mono text-[13px] tabular-nums;
+  }
+  .badge {
+    @apply inline-flex h-6 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-medium whitespace-nowrap;
+  }
+  .badge-ok {
+    color: var(--ok);
+    background: color-mix(in srgb, var(--ok) 10%, transparent);
+  }
+  .badge-warn {
+    color: var(--warn);
+    background: color-mix(in srgb, var(--warn) 10%, transparent);
+  }
+  .badge-danger {
+    color: var(--danger);
+    background: color-mix(in srgb, var(--danger) 10%, transparent);
+  }
+  .badge-neutral {
+    color: var(--muted);
+    background: color-mix(in srgb, var(--muted) 10%, transparent);
+  }
+}
+
+@keyframes row-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+@keyframes bubble-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+.row-in {
+  animation: row-in 0.35s ease-out both;
+}
+.bubble-in {
+  animation: bubble-in 0.4s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .row-in,
+  .bubble-in {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+.env.local
+.vercel/
+target/
+*.agentkey.json
+.DS_Store

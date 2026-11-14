@@ -225,7 +225,8 @@ All code was written on 14 Nov 2026, inside the hackathon window. The tag [`pre-
 
 - **Idea heritage**: NearLimit grows out of two tools built for BOT Chain: Contract Watch (live activity alerts) and TxExplain (plain-English transaction explanations). The live feed and the explanation card carry those ideas over. **All code in this repository is new and written for NEAR.**
 - **Built in the hackathon window**: everything in this repository. There is no pre-hackathon code; the first line was written on 14 Nov 2026.
-- **AI-assisted code**: the contract, tests, frontend, serverless function and this README were written with Claude Code (Anthropic) from the author's product spec, then reviewed by the author.
+- **AI-generated code**: essentially all code in this repository (the Rust contract and its tests, the React frontend, the MCP server, the CLI demo script, the serverless explain function) and this README were written with Claude Code (Anthropic). The author wrote the product spec, directed the work, chose the design references, and tested it on NEAR testnet.
+- **Templates and boilerplate**: none. The project was not started from a template or starter kit; it uses only the libraries listed above.
 - **Photos** on the home page are from [Unsplash](https://unsplash.com/license), free to use: Taylor Vick, Scott Graham, rupixen, Annie Spratt, Amol Tyagi, Shubham Dhage, freestocks, Alex Knight and Jason Leung. They are loaded from images.unsplash.com.
 - The visual style takes cues from beside.com (stone palette, section layouts), plnty.app (live ticker, navbar, tiled CTA, footer, lavender accent, cursor) and amplemarket.com (hero feed card, bento grid), set in Inter. No assets or code were copied from any of them.
 

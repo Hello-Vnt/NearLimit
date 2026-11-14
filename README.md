@@ -172,7 +172,7 @@ Deploy the app to Vercel as a Vite project. Set `VITE_CONTRACT_ID`, and optional
 
 ## Contract
 
-`contract/src/lib.rs`, Rust, near-sdk 5. Deployed at `nearlimit.testnet`. (An earlier build under the working name AgentGuard ran at `agentguard-vault.testnet` during development and is no longer used.)
+`contract/src/lib.rs`, Rust, near-sdk 5. Deployed at [`nearlimit.testnet`](https://testnet.nearblocks.io/address/nearlimit.testnet).
 
 | Method | Who | Notes |
 |---|---|---|
